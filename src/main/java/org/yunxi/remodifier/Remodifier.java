@@ -20,6 +20,7 @@ import org.yunxi.remodifier.common.config.JsonConfigInitialier;
 import org.yunxi.remodifier.common.config.toml.Config;
 import org.yunxi.remodifier.common.config.toml.ReforgeConfig;
 import org.yunxi.remodifier.common.config.toml.modifiers.*;
+import org.yunxi.remodifier.common.network.NetworkHandler;
 
 
 // The value here should match an entry in the META-INF/mods.toml file
@@ -42,6 +43,7 @@ public class Remodifier {
         modEventBus.addListener(this::commonSetup);
         MinecraftForge.EVENT_BUS.register(this);
         modEventBus.addListener(this::addCreative);
+        NetworkHandler.register();
 
         modLoadingContext.registerConfig(common, ArmorModifiersConfig.CONFIG, "remodifier/modifiers/armor-modifiers.toml");
         modLoadingContext.registerConfig(common, ToolModifiersConfig.CONFIG, "remodifier/modifiers/tool-modifiers.toml");

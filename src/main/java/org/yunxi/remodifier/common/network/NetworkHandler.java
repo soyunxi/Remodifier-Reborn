@@ -18,7 +18,7 @@ import java.util.function.Supplier;
 public class NetworkHandler {
     private static final String PROTOCOL_VERSION = "1";
     public static final SimpleChannel CHANNEL = NetworkRegistry.newSimpleChannel(
-            new ResourceLocation(Remodifier.MODID, "main"),
+            ResourceLocation.tryBuild(Remodifier.MODID, "main"),
             () -> PROTOCOL_VERSION,
             PROTOCOL_VERSION::equals,
             PROTOCOL_VERSION::equals
