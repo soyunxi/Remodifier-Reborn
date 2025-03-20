@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "down": "reforged:block/reforged_table_bottom",
+    "east": "reforged:block/reforged_table_side",
+    "north": "reforged:block/reforged_table_front",
+    "particle": "reforged:block/reforged_table_front",
+    "south": "reforged:block/reforged_table_front",
+    "up": "reforged:block/reforged_table_top",
+    "west": "reforged:block/reforged_table_side"
+  }
+}
