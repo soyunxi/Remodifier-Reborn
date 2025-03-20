@@ -18,6 +18,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.stream.Collectors;
 import java.util.List;
@@ -108,6 +109,8 @@ public class JsonConfigInitialier {
 
     public void init() {
         Logger logger = LogManager.getLogger(JsonConfigInitialier.class);
+        logger.info("Loaded modifiers json: {}", Arrays.toString(MODIFIER_NAMES.toArray()));
+        logger.info("Loaded qualities json: {}", Arrays.toString(QUALITY_NAMES.toArray()));
     }
 
     private static @NotNull List<String> getElements(@NotNull Iterable<File> files, String element) {
