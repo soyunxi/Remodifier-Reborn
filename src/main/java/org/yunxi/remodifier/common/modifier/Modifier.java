@@ -1,7 +1,6 @@
 package org.yunxi.remodifier.common.modifier;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import javafx.util.Pair;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -11,6 +10,9 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.registries.ForgeRegistries;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -85,6 +87,53 @@ public class Modifier {
         }
         return lines;
     }
+
+    public static class ModifierBuilder {
+        int weight = 100;
+        int rarity = 1;
+        final ResourceLocation name;
+        final String debugName;
+        final ModifierType type;
+        List<Pair<Attribute, AttributeModifierSupplier>> modifiers = new ObjectArrayList<>();
+
+        public ModifierBuilder(ResourceLocation name, String debugName, ModifierType type) {
+            this.name = name;
+            this.debugName = debugName;
+            this.type = type;
+        }
+
+        public ModifierBuilder setWeight(int weight) {
+            this.weight = Math.max(0, weight);
+            return this;
+        }
+
+        public ModifierBuilder setRarity(int rarity) {
+            this.rarity = Math.max(1, rarity);
+            return this;
+        }
+
+        public ModifierBuilder addModifier(Attribute attribute, AttributeModifierSupplier modifier) {
+            modifiers.add(new ImmutablePair<>(attribute, modifier));
+            return this;
+        }
+
+        public ModifierBuilder addModifiers(String @NotNull [] attribute, AttributeModifierSupplier[] modifier) {
+            for (int index = 0; index < attribute.length; index++) {
+                String entityAttribute = attribute[index];
+                Attribute registryAttribute = ForgeRegistries.ATTRIBUTES.getValue(ResourceLocation.parse(entityAttribute));
+                if (registryAttribute == null) {
+                    throw new RuntimeException("Invalid key: " + entityAttribute);
+                }
+                modifiers.add(new ImmutablePair<>(registryAttribute, modifier[index]));
+            }
+            return this;
+        }
+
+        public Modifier build() {
+            return new Modifier(name, debugName, weight,rarity, type, modifiers);
+        }
+    }
+
 
     public record AttributeModifierSupplier(double amount, AttributeModifier.Operation operation) {
 
