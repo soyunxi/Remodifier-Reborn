@@ -1,14 +1,19 @@
 package org.yunxi.remodifier;
 
 import com.mojang.logging.LogUtils;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
+import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -21,6 +26,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegisterEvent;
 import net.minecraftforge.registries.RegistryObject;
 import org.slf4j.Logger;
 import org.yunxi.remodifier.common.block.ReforgedTableBlock;
@@ -29,6 +35,7 @@ import org.yunxi.remodifier.common.config.toml.ReModifierConfig;
 import org.yunxi.remodifier.common.config.toml.ReforgeConfig;
 import org.yunxi.remodifier.common.config.toml.modifiers.*;
 import org.yunxi.remodifier.common.curios.ICurioProxy;
+import org.yunxi.remodifier.common.events.CommonEvents;
 import org.yunxi.remodifier.common.item.ModifierBookItem;
 import org.yunxi.remodifier.common.modifier.Modifiers;
 import org.yunxi.remodifier.common.network.NetworkHandler;
@@ -48,7 +55,7 @@ public class Remodifier {
     public static final RegistryObject<Item> MODIFIER_BOOK;
     public static final RegistryObject<Item> REFORGED_TABLE_ITEM;
     public static ICurioProxy CURIO_PROXY;
-    public static CreativeModeTab GROUP_BOOKS;
+//    public static CreativeModeTab GROUP_BOOKS;
 
     @SuppressWarnings("removal")
     public Remodifier() {
@@ -64,6 +71,7 @@ public class Remodifier {
         MinecraftForge.EVENT_BUS.register(this);
         modEventBus.addListener(this::addCreative);
         NetworkHandler.register();
+        forgeEventBus.register(CommonEvents.class);
 
         modLoadingContext.registerConfig(common, ArmorModifiersConfig.CONFIG, "remodifier/modifiers/armor-modifiers.toml");
         modLoadingContext.registerConfig(common, ToolModifiersConfig.CONFIG, "remodifier/modifiers/tool-modifiers.toml");
@@ -91,6 +99,22 @@ public class Remodifier {
     public void onServerStarting(ServerStartingEvent event) {
         // Do something when the server starts
         LOGGER.info("HELLO from server starting");
+    }
+
+
+    @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+    public static class ModEvents {
+        @SubscribeEvent
+        public static void onRegister(RegisterEvent event) {
+            event.register(Registries.CREATIVE_MODE_TAB, ResourceLocation.fromNamespaceAndPath(MODID, "remodifier_books"), () -> CreativeModeTab.builder()
+                    .displayItems((itemDisplayParameters, output) -> {
+                        output.accept(new ItemStack(REFORGED_TABLE_ITEM.get()));
+                        ModifierBookItem.getStacks().forEach(output::accept);
+                    })
+                    .icon(() -> new ItemStack(MODIFIER_BOOK.get()))
+                    .title(Component.translatable("itemGroup.remodifier.books"))
+                    .build());
+        }
     }
 
     // You can use EventBusSubscriber to automatically register all static methods in the class annotated with @SubscribeEvent
@@ -128,5 +152,6 @@ public class Remodifier {
         REFORGED_TABLE = BLOCK_DEFERRED_REGISTER.register("reforged_table", ReforgedTableBlock::new);
         REFORGED_TABLE_ITEM = ITEM_DEFERRED_REGISTER.register("reforged_table", () -> new BlockItem(REFORGED_TABLE.get(), new Item.Properties()));
         MODIFIER_BOOK = ITEM_DEFERRED_REGISTER.register("modifier_book", ModifierBookItem::new);
+//        GROUP_BOOKS = CreativeModeTab.builder().title(Component.translatable("itemGroup.remodifier.books")).icon(() -> new ItemStack(MODIFIER_BOOK.get())).build();
     }
 }
