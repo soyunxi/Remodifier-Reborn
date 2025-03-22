@@ -10,7 +10,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.yunxi.remodifier.Remodifier;
-import org.yunxi.remodifier.common.config.toml.Config;
+import org.yunxi.remodifier.common.config.toml.ReModifierConfig;
 
 import java.io.File;
 import java.io.FileReader;
@@ -20,8 +20,8 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.stream.Collectors;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @SuppressWarnings("ResultOfMethodCallIgnored")
 public class JsonConfigInitialier {
@@ -31,7 +31,7 @@ public class JsonConfigInitialier {
     static {
         ROOT.toFile().mkdirs();
         mkdirs("qualities", "modifiers");
-        if (Config.CRASHTHEGAME_IFCONFIG_HASERRORS.get()) generateExampleFile();
+        if (ReModifierConfig.CRASHTHEGAME_IFCONFIG_HASERRORS.get()) generateExampleFile();
     }
 
     private static @NotNull FileWriter writeModifiersFile(File configFile) throws IOException {

@@ -1,11 +1,8 @@
 package org.yunxi.remodifier.common.config.toml;
 
-import com.google.common.collect.Lists;
 import net.minecraftforge.common.ForgeConfigSpec;
 
-import java.util.List;
-
-public class Config {
+public class ReModifierConfig {
     public static ForgeConfigSpec CONFIG;
     public static ForgeConfigSpec.BooleanValue QUALITY;
     public static ForgeConfigSpec.BooleanValue SHOULD_GENERATE_VIOLENT_JSON;

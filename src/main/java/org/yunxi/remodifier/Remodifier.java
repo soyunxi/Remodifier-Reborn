@@ -25,11 +25,12 @@ import net.minecraftforge.registries.RegistryObject;
 import org.slf4j.Logger;
 import org.yunxi.remodifier.common.block.ReforgedTableBlock;
 import org.yunxi.remodifier.common.config.JsonConfigInitialier;
-import org.yunxi.remodifier.common.config.toml.Config;
+import org.yunxi.remodifier.common.config.toml.ReModifierConfig;
 import org.yunxi.remodifier.common.config.toml.ReforgeConfig;
 import org.yunxi.remodifier.common.config.toml.modifiers.*;
 import org.yunxi.remodifier.common.curios.ICurioProxy;
 import org.yunxi.remodifier.common.item.ModifierBookItem;
+import org.yunxi.remodifier.common.modifier.Modifiers;
 import org.yunxi.remodifier.common.network.NetworkHandler;
 
 
@@ -70,7 +71,7 @@ public class Remodifier {
         modLoadingContext.registerConfig(common, ShieldModifiersConfig.CONFIG, "remodifier/modifiers/shield-modifiers.toml");
         modLoadingContext.registerConfig(common, CuriosModifiersConfig.CONFIG, "remodifier/modifiers/curios-modifiers.toml");
         modLoadingContext.registerConfig(common, ReforgeConfig.CONFIG, "remodifier/reforge.toml");
-        modLoadingContext.registerConfig(common, Config.CONFIG, "remodifier/config.toml");
+        modLoadingContext.registerConfig(common, ReModifierConfig.CONFIG, "remodifier/config.toml");
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
@@ -109,7 +110,7 @@ public class Remodifier {
     }
 
     private void setup(final FMLCommonSetupEvent event) {
-//        Modifiers.initialize();
+        Modifiers.initialize();
         event.enqueueWork(() -> {
             if (isCuriosLoaded()) {
                 try {
