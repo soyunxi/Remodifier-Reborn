@@ -173,6 +173,11 @@ dependencies {
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 //    implementation fg.deobf("curse.maven:remodified-889341:5089575")
+    implementation fg.deobf("curse.maven:curios-309927:6238756")
+
+
+//    runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}")
+//    compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}:api")
 
 }
 

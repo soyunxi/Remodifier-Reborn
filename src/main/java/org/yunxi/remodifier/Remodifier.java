@@ -2,6 +2,7 @@ package org.yunxi.remodifier;
 
 import com.mojang.logging.LogUtils;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -11,6 +12,7 @@ import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
@@ -26,6 +28,7 @@ import org.yunxi.remodifier.common.config.JsonConfigInitialier;
 import org.yunxi.remodifier.common.config.toml.Config;
 import org.yunxi.remodifier.common.config.toml.ReforgeConfig;
 import org.yunxi.remodifier.common.config.toml.modifiers.*;
+import org.yunxi.remodifier.common.curios.ICurioProxy;
 import org.yunxi.remodifier.common.item.ModifierBookItem;
 import org.yunxi.remodifier.common.network.NetworkHandler;
 
@@ -43,6 +46,8 @@ public class Remodifier {
     public static final DeferredRegister<Item> ITEM_DEFERRED_REGISTER = DeferredRegister.create(ForgeRegistries.ITEMS, MODID);
     public static final RegistryObject<Item> MODIFIER_BOOK;
     public static final RegistryObject<Item> REFORGED_TABLE_ITEM;
+    public static ICurioProxy CURIO_PROXY;
+    public static CreativeModeTab GROUP_BOOKS;
 
     @SuppressWarnings("removal")
     public Remodifier() {
@@ -94,6 +99,28 @@ public class Remodifier {
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {
         }
+    }
+
+    private static Boolean isCuriosLoaded = null;
+
+    public static boolean isCuriosLoaded() {
+        if (isCuriosLoaded == null) isCuriosLoaded = ModList.get().isLoaded("curios");
+        return isCuriosLoaded;
+    }
+
+    private void setup(final FMLCommonSetupEvent event) {
+//        Modifiers.initialize();
+        event.enqueueWork(() -> {
+            if (isCuriosLoaded()) {
+                try {
+                    CURIO_PROXY = (ICurioProxy) Class.forName("org.yunxi.remodifier.common.curios.CurioCompat").getDeclaredConstructor().newInstance();
+                    MinecraftForge.EVENT_BUS.register(CURIO_PROXY);
+                } catch (Exception e) {
+                    LOGGER.error("Remodifier failed to load Curios integration.", e);
+                }
+            }
+            if (CURIO_PROXY == null) CURIO_PROXY = new ICurioProxy() {};
+        });
     }
 
     static {
