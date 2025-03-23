@@ -1,7 +1,7 @@
 {
   "itemGroup.remodifier_books": "词缀",
   "itemGroup.remodifier.books": "词缀",
-  "item.remodifier.modifier_book": "词缀",
+  "item.remodifier.modifier_book": "词缀书",
   "item.remodifier.modifier_book.tooltip.0": "§9通过锻造台重铸物品.",
   "item.remodifier.modifier_book.tooltip.1": "§d仅限于创造模式.",
   "item.remodifier.modifier_book.tooltip.invalid": "§d无效的词缀",

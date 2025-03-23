@@ -24,11 +24,13 @@ import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.loading.FMLLoader;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegisterEvent;
 import net.minecraftforge.registries.RegistryObject;
 import org.slf4j.Logger;
+import org.yunxi.remodifier.client.events.ClientEvents;
 import org.yunxi.remodifier.common.block.ReforgedTableBlock;
 import org.yunxi.remodifier.common.config.JsonConfigInitialier;
 import org.yunxi.remodifier.common.config.toml.ReModifierConfig;
@@ -72,6 +74,7 @@ public class Remodifier {
         modEventBus.addListener(this::addCreative);
         NetworkHandler.register();
         forgeEventBus.register(CommonEvents.class);
+        if (FMLLoader.getDist().isClient()) forgeEventBus.register(ClientEvents.class);
 
         modLoadingContext.registerConfig(common, ArmorModifiersConfig.CONFIG, "remodifier/modifiers/armor-modifiers.toml");
         modLoadingContext.registerConfig(common, ToolModifiersConfig.CONFIG, "remodifier/modifiers/tool-modifiers.toml");
@@ -88,6 +91,18 @@ public class Remodifier {
         LOGGER.info("DIRT BLOCK >> {}", ForgeRegistries.BLOCKS.getKey(Blocks.DIRT));
 
         new JsonConfigInitialier().init();
+        Modifiers.initialize();
+        event.enqueueWork(() -> {
+            if (isCuriosLoaded()) {
+                try {
+                    CURIO_PROXY = (ICurioProxy) Class.forName("org.yunxi.remodifier.common.curios.CurioCompat").getDeclaredConstructor().newInstance();
+                    MinecraftForge.EVENT_BUS.register(CURIO_PROXY);
+                } catch (Exception e) {
+                    LOGGER.error("Remodifier failed to load Curios integration.", e);
+                }
+            }
+            if (CURIO_PROXY == null) CURIO_PROXY = new ICurioProxy() {};
+        });
     }
 
     // Add the example block item to the building blocks tab
@@ -134,18 +149,6 @@ public class Remodifier {
     }
 
     private void setup(final FMLCommonSetupEvent event) {
-        Modifiers.initialize();
-        event.enqueueWork(() -> {
-            if (isCuriosLoaded()) {
-                try {
-                    CURIO_PROXY = (ICurioProxy) Class.forName("org.yunxi.remodifier.common.curios.CurioCompat").getDeclaredConstructor().newInstance();
-                    MinecraftForge.EVENT_BUS.register(CURIO_PROXY);
-                } catch (Exception e) {
-                    LOGGER.error("Remodifier failed to load Curios integration.", e);
-                }
-            }
-            if (CURIO_PROXY == null) CURIO_PROXY = new ICurioProxy() {};
-        });
     }
 
     static {

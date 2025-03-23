@@ -292,7 +292,7 @@ public class ModifierHandler {
 
     public static List<String> getArmorsNames() {
         List<String> list = new ArrayList<>();
-        List<Integer> integers = getTypeModifier("armors");
+        List<Integer> integers = getTypeModifier("armor");
         for (Integer integer : integers) {
             list.add(JsonConfigInitialier.MODIFIER_NAMES.get(integer));
         }
@@ -301,7 +301,7 @@ public class ModifierHandler {
 
     public static List<String> getArmorsWeights() {
         List<String> list = new ArrayList<String>();
-        List<Integer> integers = getTypeModifier("armors");
+        List<Integer> integers = getTypeModifier("armor");
         for (Integer integer : integers) {
             list.add(JsonConfigInitialier.MODIFIER_WEIGHTS.get(integer));
         }
@@ -310,7 +310,7 @@ public class ModifierHandler {
 
     public static List<String> getArmorsRarities() {
         List<String> list = new ArrayList<String>();
-        List<Integer> integers = getTypeModifier("armors");
+        List<Integer> integers = getTypeModifier("armor");
         for (Integer integer : integers) {
             list.add(JsonConfigInitialier.MODIFIER_RARITY.get(integer));
         }
@@ -319,7 +319,7 @@ public class ModifierHandler {
 
     public static List<String> getArmorsAttributes() {
         List<String> list = new ArrayList<String>();
-        List<Integer> integers = getTypeModifier("armors");
+        List<Integer> integers = getTypeModifier("armor");
         for (Integer integer : integers) {
             list.add(JsonConfigInitialier.MODIFIER_ATTRIBUTES.get(integer));
         }
@@ -328,7 +328,7 @@ public class ModifierHandler {
 
     public static List<String> getArmorsAmounts() {
         List<String> list = new ArrayList<String>();
-        List<Integer> integers = getTypeModifier("armors");
+        List<Integer> integers = getTypeModifier("armor");
         for (Integer integer : integers) {
             list.add(JsonConfigInitialier.MODIFIER_AMOUNTS.get(integer));
         }
@@ -337,7 +337,7 @@ public class ModifierHandler {
 
     public static List<String> getArmorsOperationsIDS() {
         List<String> list = new ArrayList<String>();
-        List<Integer> integers = getTypeModifier("armors");
+        List<Integer> integers = getTypeModifier("armor");
         for (Integer integer : integers) {
             list.add(JsonConfigInitialier.MODIFIER_OPERATION_ID.get(integer));
         }

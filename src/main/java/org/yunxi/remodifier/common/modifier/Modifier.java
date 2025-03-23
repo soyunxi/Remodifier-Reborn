@@ -59,10 +59,10 @@ public class Modifier {
 
         if (amount > 0) {
             return Component.translatable("attribute.modifier.plus." + modifierSupplier.operation.toValue(), ATTRIBUTE_MODIFIER_FORMAT.format(temp),
-                    entry.getKey().getDescriptionId().formatted(ChatFormatting.BLUE));
+                    Component.translatable(entry.getKey().getDescriptionId())).setStyle(Style.EMPTY.applyFormat(ChatFormatting.BLUE));
         } else if (amount < 0) {
-            return Component.translatable("attribute.modifier.take." + modifierSupplier.operation.toValue(), ATTRIBUTE_MODIFIER_FORMAT.format(temp),
-                    entry.getKey().getDescriptionId().formatted(ChatFormatting.RED));
+            return Component.translatable("attribute.modifier.take." + modifierSupplier.operation.toValue(), ATTRIBUTE_MODIFIER_FORMAT.format(Math.abs(temp)),
+                    Component.translatable(entry.getKey().getDescriptionId())).setStyle(Style.EMPTY.applyFormat(ChatFormatting.RED));
         }
 
         return null;
@@ -135,7 +135,6 @@ public class Modifier {
 
 
     public record AttributeModifierSupplier(double amount, AttributeModifier.Operation operation) {
-
         @Contract(value = "_, _ -> new", pure = true)
         public @NotNull AttributeModifier getAttributeModifier(UUID id, String name) {
             return new AttributeModifier(id, name, amount, operation);

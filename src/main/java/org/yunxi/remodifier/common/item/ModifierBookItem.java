@@ -13,6 +13,7 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 import org.yunxi.remodifier.Remodifier;
+import org.yunxi.remodifier.common.config.JsonConfigInitialier;
 import org.yunxi.remodifier.common.modifier.Modifier;
 import org.yunxi.remodifier.common.modifier.ModifierHandler;
 import org.yunxi.remodifier.common.modifier.Modifiers;
@@ -29,8 +30,7 @@ public class ModifierBookItem extends Item {
         if (!stack.hasTag()) return false;
         CompoundTag tag = stack.getTag();
         if (tag == null) return false;
-        return tag.contains(ModifierHandler.bookTagName) && !tag.getString(ModifierHandler.bookTagName).equals("modifiers:none");
-
+        return tag.contains(ModifierHandler.bookTagName) && !tag.getString(ModifierHandler.bookTagName).equals("remodifiers:none");
     }
 
     @Override
@@ -44,7 +44,7 @@ public class ModifierBookItem extends Item {
         if (!stack.hasTag() || (stack.getTag() != null && !stack.getTag().contains(ModifierHandler.bookTagName))) return base;
         Modifier mod = Modifiers.MODIFIERS.get(ResourceLocation.parse(stack.getTag().getString(ModifierHandler.bookTagName)));
         if (mod == null) return base;
-        return Component.translatable("misc.modifiers.modifier_prefix").append(mod.getFormattedName());
+        return Component.translatable("item.remodifier.modifier_book").append("：").append(mod.getFormattedName());
     }
 
     @Override
@@ -64,10 +64,10 @@ public class ModifierBookItem extends Item {
 
     @Override
     public boolean onLeftClickEntity(ItemStack stack, Player player, Entity entity) {
-        List<String> toolNames = ModifierHandler.getToolNames();
-        for (String toolName : toolNames) {
-            player.displayClientMessage(Component.translatable(toolName), false);
+        for (ItemStack itemStack : getStacks()) {
+            player.displayClientMessage(itemStack.getDisplayName(), false);
         }
+        player.displayClientMessage(Component.nullToEmpty(getStacks().size() + ""), false);
         return super.onLeftClickEntity(stack, player, entity);
     }
 

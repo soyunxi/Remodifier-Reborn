@@ -201,14 +201,14 @@ public class Modifiers {
                 String[] attributes = attribute.split(";");
                 String[] amounts = amount.split(";");
                 String[] operations_ids = operations_id.split(";");
-                addArmor(held(name).addModifiers(attributes, mods(amounts, operations_ids)).setWeight(Integer.parseInt(weight)).build());
+                addArmor(equipped(name).addModifiers(attributes, mods(amounts, operations_ids)).setWeight(Integer.parseInt(weight)).build());
             } else {
                 Attribute entityAttribute = ForgeRegistries.ATTRIBUTES.getValue(ResourceLocation.parse(attribute));
                 if (entityAttribute == null) {
                     Remodifier.LOGGER.error("Invalid value: {}", attribute);
                     return;
                 }
-                addArmor(held(name).setWeight(Integer.parseInt(weight)).setRarity(Integer.parseInt(rarity)).addModifier(entityAttribute, mod(Double.parseDouble(amount), AttributeModifier.Operation.fromValue(Integer.parseInt(operations_id)))).build());
+                addArmor(equipped(name).setWeight(Integer.parseInt(weight)).setRarity(Integer.parseInt(rarity)).addModifier(entityAttribute, mod(Double.parseDouble(amount), AttributeModifier.Operation.fromValue(Integer.parseInt(operations_id)))).build());
             }
         }
     }
@@ -231,14 +231,14 @@ public class Modifiers {
                 String[] attributes = attribute.split(";");
                 String[] amounts = amount.split(";");
                 String[] operations_ids = operations_id.split(";");
-                addCurio(held(name).addModifiers(attributes, mods(amounts, operations_ids)).setWeight(Integer.parseInt(weight)).build());
+                addCurio(equipped(name).addModifiers(attributes, mods(amounts, operations_ids)).setWeight(Integer.parseInt(weight)).build());
             } else {
                 Attribute entityAttribute = ForgeRegistries.ATTRIBUTES.getValue(ResourceLocation.parse(attribute));
                 if (entityAttribute == null) {
                     Remodifier.LOGGER.error("Invalid value: {}", attribute);
                     return;
                 }
-                addCurio(held(name).setWeight(Integer.parseInt(weight)).setRarity(Integer.parseInt(rarity)).addModifier(entityAttribute, mod(Double.parseDouble(amount), AttributeModifier.Operation.fromValue(Integer.parseInt(operations_id)))).build());
+                addCurio(equipped(name).setWeight(Integer.parseInt(weight)).setRarity(Integer.parseInt(rarity)).addModifier(entityAttribute, mod(Double.parseDouble(amount), AttributeModifier.Operation.fromValue(Integer.parseInt(operations_id)))).build());
             }
         }
     }

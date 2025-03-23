@@ -36,7 +36,7 @@ public class JsonConfigInitialier {
 
     private static @NotNull FileWriter writeModifiersFile(File configFile) throws IOException {
         JsonObject config = new JsonObject();
-        config.addProperty(TYPE, "ARMOR");
+        config.addProperty(TYPE, "armor");
         config.addProperty(WEIGHT, 100);
         config.addProperty(ATTRIBUTES, "minecraft:generic.attack_speed");
         config.addProperty(AMOUNTS, "0.04");
@@ -64,7 +64,7 @@ public class JsonConfigInitialier {
     }
 
     private static void generateExampleFile() {
-        File modifiersViolent = new File(ROOT.resolve("modifier").toFile(), "violent.json");
+        File modifiersViolent = new File(ROOT.resolve("modifiers").toFile(), "violent.json");
         File qualitiesViolent = new File(ROOT.resolve("qualities").toFile(), "violent.json");
         if (!modifiersViolent.exists()) {
             try {
