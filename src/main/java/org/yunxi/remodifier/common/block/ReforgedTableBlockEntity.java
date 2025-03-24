@@ -23,6 +23,8 @@ import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
 import org.yunxi.remodifier.Remodifier;
 import org.yunxi.remodifier.common.config.toml.ReforgeConfig;
+import org.yunxi.remodifier.common.modifier.Modifier;
+import org.yunxi.remodifier.common.modifier.ModifierHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +40,6 @@ public class ReforgedTableBlockEntity extends BlockEntity {
         }
     };
     private LazyOptional<IItemHandler> rollItemHandler = LazyOptional.of(() -> new CombinedInvWrapper(itemStackHandler));
-
 
     public ReforgedTableBlockEntity(BlockPos pPos, BlockState pBlockState) {
         super(Remodifier.REFORGED_TABLE_TYPE.get(), pPos, pBlockState);
@@ -65,13 +66,18 @@ public class ReforgedTableBlockEntity extends BlockEntity {
     }
 
     public void startProcessing() {
-        ItemStack rollItem = itemStackHandler.getStackInSlot(0);
-        ItemStack reforgeItem = itemStackHandler.getStackInSlot(1);
+        ItemStack rollItem = itemStackHandler.getStackInSlot(0).copy();
+        ItemStack reforgeItem = itemStackHandler.getStackInSlot(1).copy();
+        Modifier modifier = ModifierHandler.getModifier(reforgeItem);
+
     }
 
     public boolean canProcess() {
         ItemStack rollItem = itemStackHandler.getStackInSlot(0);
         ItemStack reforgeItem = itemStackHandler.getStackInSlot(1);
+        if (rollItem.isEmpty() || reforgeItem.isEmpty()) {
+            return false;
+        }
         if (!ReforgeConfig.DISABLE_REPAIR_REFORGED.get()) {
             return rollItem.getItem().isValidRepairItem(rollItem, reforgeItem);
         }
@@ -84,14 +90,5 @@ public class ReforgedTableBlockEntity extends BlockEntity {
             }
         }
         return reforgeItems.contains(reforgeItem.getItem());
-    }
-
-    public static List<ItemStack> convertToItemStacks(List<String> itemNames) {
-        return itemNames.stream()
-                .map(ResourceLocation::new) // 将字符串转换为 ResourceLocation
-                .map(ForgeRegistries.ITEMS::getValue) // 获取对应的 Item
-                .filter(Objects::nonNull) // 过滤掉无效的物品
-                .map(ItemStack::new) // 转换为 ItemStack
-                .collect(Collectors.toList()); // 收集到 List
     }
 }
