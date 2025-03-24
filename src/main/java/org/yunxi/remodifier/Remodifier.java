@@ -10,6 +10,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
@@ -32,6 +33,7 @@ import net.minecraftforge.registries.RegistryObject;
 import org.slf4j.Logger;
 import org.yunxi.remodifier.client.events.ClientEvents;
 import org.yunxi.remodifier.common.block.ReforgedTableBlock;
+import org.yunxi.remodifier.common.block.ReforgedTableBlockEntity;
 import org.yunxi.remodifier.common.config.JsonConfigInitialier;
 import org.yunxi.remodifier.common.config.toml.ReModifierConfig;
 import org.yunxi.remodifier.common.config.toml.ReforgeConfig;
@@ -53,6 +55,7 @@ public class Remodifier {
     public static final Logger LOGGER = LogUtils.getLogger();
     public static final DeferredRegister<Block> BLOCK_DEFERRED_REGISTER = DeferredRegister.create(ForgeRegistries.BLOCKS, MODID);
     public static final RegistryObject<Block> REFORGED_TABLE;
+    public static final RegistryObject<BlockEntityType<ReforgedTableBlockEntity>> REFORGED_TABLE_TYPE;
     public static final DeferredRegister<Item> ITEM_DEFERRED_REGISTER = DeferredRegister.create(ForgeRegistries.ITEMS, MODID);
     public static final RegistryObject<Item> MODIFIER_BOOK;
     public static final RegistryObject<Item> REFORGED_TABLE_ITEM;
@@ -153,8 +156,10 @@ public class Remodifier {
 
     static {
         REFORGED_TABLE = BLOCK_DEFERRED_REGISTER.register("reforged_table", ReforgedTableBlock::new);
+        REFORGED_TABLE_TYPE = BLOCK_DEFERRED_REGISTER.register("reforged_table",
+                () -> BlockEntityType.Builder.of(ReforgedTableBlockEntity::new,
+                        REFORGED_TABLE.get()).build(null))
         REFORGED_TABLE_ITEM = ITEM_DEFERRED_REGISTER.register("reforged_table", () -> new BlockItem(REFORGED_TABLE.get(), new Item.Properties()));
         MODIFIER_BOOK = ITEM_DEFERRED_REGISTER.register("modifier_book", ModifierBookItem::new);
-//        GROUP_BOOKS = CreativeModeTab.builder().title(Component.translatable("itemGroup.remodifier.books")).icon(() -> new ItemStack(MODIFIER_BOOK.get())).build();
     }
 }
