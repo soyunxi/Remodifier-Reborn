@@ -1,57 +1,97 @@
 package org.yunxi.remodifier.common.block;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.items.wrapper.CombinedInvWrapper;
+import net.minecraftforge.registries.ForgeRegistries;
+import org.jetbrains.annotations.Nullable;
 import org.yunxi.remodifier.Remodifier;
+import org.yunxi.remodifier.common.config.toml.ReforgeConfig;
 
-public class ReforgedTableBlockEntity extends BlockEntity implements Container {
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+
+public class ReforgedTableBlockEntity extends BlockEntity {
+
+    private final ItemStackHandler itemStackHandler = new ItemStackHandler(1) {
+        @Override
+        protected void onContentsChanged(int slot) {
+            setChanged();
+        }
+    };
+    private LazyOptional<IItemHandler> rollItemHandler = LazyOptional.of(() -> new CombinedInvWrapper(itemStackHandler));
+
 
     public ReforgedTableBlockEntity(BlockPos pPos, BlockState pBlockState) {
         super(Remodifier.REFORGED_TABLE_TYPE.get(), pPos, pBlockState);
     }
 
+    public ItemStackHandler getIItemStackHandler() {
+        return itemStackHandler;
+    }
+
+
+
     @Override
-    public int getContainerSize() {
-        return 0;
+    protected void saveAdditional(CompoundTag pTag) {
+        super.saveAdditional(pTag);
+        pTag.put("itemStackHandler", itemStackHandler.serializeNBT());
     }
 
     @Override
-    public boolean isEmpty() {
-        return false;
+    public void load(CompoundTag pTag) {
+        super.load(pTag);
+        if (pTag.contains("rollItemHandler")) {
+            itemStackHandler.deserializeNBT(pTag.getCompound("rollItemHandler"));
+        }
     }
 
-    @Override
-    public ItemStack getItem(int i) {
-        return null;
+    public void startProcessing() {
+        ItemStack rollItem = itemStackHandler.getStackInSlot(0);
+        ItemStack reforgeItem = itemStackHandler.getStackInSlot(1);
     }
 
-    @Override
-    public ItemStack removeItem(int i, int i1) {
-        return null;
+    public boolean canProcess() {
+        ItemStack rollItem = itemStackHandler.getStackInSlot(0);
+        ItemStack reforgeItem = itemStackHandler.getStackInSlot(1);
+        if (!ReforgeConfig.DISABLE_REPAIR_REFORGED.get()) {
+            return rollItem.getItem().isValidRepairItem(rollItem, reforgeItem);
+        }
+        List<Item> reforgeItems = new ArrayList<>();
+        for (String s : ReforgeConfig.UNIVERSAL_REFORGE_ITEM.get()) {
+            ResourceLocation parse = ResourceLocation.parse(s);
+            Item value = ForgeRegistries.ITEMS.getValue(parse);
+            if (value != null) {
+                reforgeItems.add(value);
+            }
+        }
+        return reforgeItems.contains(reforgeItem.getItem());
     }
 
-    @Override
-    public ItemStack removeItemNoUpdate(int i) {
-        return null;
-    }
-
-    @Override
-    public void setItem(int i, ItemStack itemStack) {
-
-    }
-
-    @Override
-    public boolean stillValid(Player player) {
-        return false;
-    }
-
-    @Override
-    public void clearContent() {
-
+    public static List<ItemStack> convertToItemStacks(List<String> itemNames) {
+        return itemNames.stream()
+                .map(ResourceLocation::new) // 将字符串转换为 ResourceLocation
+                .map(ForgeRegistries.ITEMS::getValue) // 获取对应的 Item
+                .filter(Objects::nonNull) // 过滤掉无效的物品
+                .map(ItemStack::new) // 转换为 ItemStack
+                .collect(Collectors.toList()); // 收集到 List
     }
 }

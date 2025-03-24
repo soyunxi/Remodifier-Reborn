@@ -4,6 +4,7 @@ import com.mojang.logging.LogUtils;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
@@ -13,8 +14,8 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.extensions.IForgeMenuType;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
-import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -31,6 +32,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegisterEvent;
 import net.minecraftforge.registries.RegistryObject;
 import org.slf4j.Logger;
+import org.yunxi.remodifier.client.ReforgeTableContainer;
 import org.yunxi.remodifier.client.events.ClientEvents;
 import org.yunxi.remodifier.common.block.ReforgedTableBlock;
 import org.yunxi.remodifier.common.block.ReforgedTableBlockEntity;
@@ -55,12 +57,14 @@ public class Remodifier {
     public static final Logger LOGGER = LogUtils.getLogger();
     public static final DeferredRegister<Block> BLOCK_DEFERRED_REGISTER = DeferredRegister.create(ForgeRegistries.BLOCKS, MODID);
     public static final RegistryObject<Block> REFORGED_TABLE;
+    public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITY_TYPE_DEFERRED_REGISTER = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, MODID);
     public static final RegistryObject<BlockEntityType<ReforgedTableBlockEntity>> REFORGED_TABLE_TYPE;
     public static final DeferredRegister<Item> ITEM_DEFERRED_REGISTER = DeferredRegister.create(ForgeRegistries.ITEMS, MODID);
     public static final RegistryObject<Item> MODIFIER_BOOK;
     public static final RegistryObject<Item> REFORGED_TABLE_ITEM;
+    public static final DeferredRegister<MenuType<?>> MENU_DEFERRED_REGISTER = DeferredRegister.create(ForgeRegistries.MENU_TYPES, MODID);
+    public static final RegistryObject<MenuType<ReforgeTableContainer>> REFORGED_TABLE_MENU;
     public static ICurioProxy CURIO_PROXY;
-//    public static CreativeModeTab GROUP_BOOKS;
 
     @SuppressWarnings("removal")
     public Remodifier() {
@@ -70,6 +74,8 @@ public class Remodifier {
         final ModConfig.Type common = ModConfig.Type.COMMON;
         BLOCK_DEFERRED_REGISTER.register(modEventBus);
         ITEM_DEFERRED_REGISTER.register(modEventBus);
+        BLOCK_ENTITY_TYPE_DEFERRED_REGISTER.register(modEventBus);
+        MENU_DEFERRED_REGISTER.register(modEventBus);
 
 
         modEventBus.addListener(this::commonSetup);
@@ -156,10 +162,9 @@ public class Remodifier {
 
     static {
         REFORGED_TABLE = BLOCK_DEFERRED_REGISTER.register("reforged_table", ReforgedTableBlock::new);
-        REFORGED_TABLE_TYPE = BLOCK_DEFERRED_REGISTER.register("reforged_table",
-                () -> BlockEntityType.Builder.of(ReforgedTableBlockEntity::new,
-                        REFORGED_TABLE.get()).build(null))
+        REFORGED_TABLE_TYPE = BLOCK_ENTITY_TYPE_DEFERRED_REGISTER.register("reforged_table", () -> BlockEntityType.Builder.of(ReforgedTableBlockEntity::new, REFORGED_TABLE.get()).build(null));
         REFORGED_TABLE_ITEM = ITEM_DEFERRED_REGISTER.register("reforged_table", () -> new BlockItem(REFORGED_TABLE.get(), new Item.Properties()));
         MODIFIER_BOOK = ITEM_DEFERRED_REGISTER.register("modifier_book", ModifierBookItem::new);
+        REFORGED_TABLE_MENU = MENU_DEFERRED_REGISTER.register("reforged_table", () -> IForgeMenuType.create((windowId, inv, data) -> new ReforgeTableContainer(windowId, inv.player, data.readBlockPos())));
     }
 }
