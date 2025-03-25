@@ -24,7 +24,7 @@ public class ModifierHandler {
     public static final String bookTagName = "bookModifier";
 
     public static boolean canHaveModifiers(@NotNull ItemStack stack) {
-        return !stack.isEmpty() && stack.getMaxStackSize() <= 1;
+        return Modifiers.curioPool.isApplicable.test(stack) || Modifiers.toolPool.isApplicable.test(stack) || Modifiers.bowPool.isApplicable.test(stack) || Modifiers.shieldPool.isApplicable.test(stack) || Modifiers.armorPool.isApplicable.test(stack);
     }
 
     @Nullable

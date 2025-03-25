@@ -13,7 +13,6 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 import org.yunxi.remodifier.Remodifier;
-import org.yunxi.remodifier.common.config.JsonConfigInitialier;
 import org.yunxi.remodifier.common.modifier.Modifier;
 import org.yunxi.remodifier.common.modifier.ModifierHandler;
 import org.yunxi.remodifier.common.modifier.Modifiers;

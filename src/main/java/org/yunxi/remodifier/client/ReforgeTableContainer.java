@@ -2,7 +2,6 @@ package org.yunxi.remodifier.client;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.Container;
-import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerLevelAccess;
@@ -34,10 +33,6 @@ public class ReforgeTableContainer extends AbstractContainerMenu {
 
     public BlockPos getPos() {
         return pos;
-    }
-
-    public Player getPlayer() {
-        return player;
     }
 
     private int addSlotRange(Container playerInventory, int index, int x, int y, int amount, int dx) {
@@ -73,40 +68,52 @@ public class ReforgeTableContainer extends AbstractContainerMenu {
     public ItemStack quickMoveStack(Player player, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
-        if (slot.hasItem()) {
-            ItemStack item = slot.getItem();
-            itemstack = item.copy();
-            if (index < 2) {
-                if (moveItemStackTo(itemstack, 2, slots.size(), true)) {
-                    return ItemStack.EMPTY;
-                }
-            } else {
-                if (!moveItemStackTo(item, 0, 2, false)) {
-                    if (index < 2 + 27) {
-                        if (!moveItemStackTo(itemstack, 2 +  27, 2 + 36, false)) {
-                            return ItemStack.EMPTY;
-                        }
-                    }
+        if (slot != null && slot.hasItem()) {
+            ItemStack sourceStack = slot.getItem();
+            itemstack = sourceStack.copy();
 
-                    else if (index < 2 + Inventory.INVENTORY_SIZE) {
-                        if (!moveItemStackTo(itemstack, 2, 2 + 27, false)) {
-                            return ItemStack.EMPTY;
-                        }
+            // 容器槽位 -> 玩家背包/快捷栏
+            if (index < 2) {
+                boolean moved = this.moveItemStackTo(sourceStack, 2, this.slots.size(), true);
+                if (!moved) {
+                    return ItemStack.EMPTY; // 完全无法移动
+                }
+            }
+            // 玩家背包/快捷栏 -> 容器槽位
+            else {
+                // 1. 先尝试移动到容器槽位
+                boolean movedToContainer = this.moveItemStackTo(sourceStack, 0, 2, false);
+                if (!movedToContainer) {
+                    // 2. 容器移动失败后，处理玩家内部移动
+                    if (index >= 2 && index < 29) { // 主背包 -> 快捷栏
+                        movedToContainer = this.moveItemStackTo(sourceStack, 29, 38, false);
+                    } else if (index >= 29 && index < 38) { // 快捷栏 -> 主背包
+                        movedToContainer = this.moveItemStackTo(sourceStack, 2, 29, false);
+                    }
+                    if (!movedToContainer) {
+                        return ItemStack.EMPTY; // 完全无法移动
                     }
                 }
-                if (item.isEmpty()) {
-                    slot.set(ItemStack.EMPTY);
-                } else {
-                    slot.setChanged();
-                }
-                if (item.getCount() == itemstack.getCount()) {
-                    return ItemStack.EMPTY;
-                }
-                slot.onTake(player, item);
             }
+
+            // 更新原槽位状态
+            if (sourceStack.isEmpty()) {
+                slot.set(ItemStack.EMPTY); // 完全移出物品时清空槽位
+            } else {
+                slot.setChanged(); // 部分移动时标记更新
+            }
+
+            // 检查是否未移动任何物品
+            if (sourceStack.getCount() == itemstack.getCount()) {
+                return ItemStack.EMPTY;
+            }
+
+            // 触发槽位更新事件
+            slot.onTake(player, sourceStack);
         }
         return itemstack;
     }
+
 
 
     @Override

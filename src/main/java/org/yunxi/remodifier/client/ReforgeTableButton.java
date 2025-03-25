@@ -2,14 +2,15 @@ package org.yunxi.remodifier.client;
 
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.resources.sounds.SimpleSoundInstance;
+import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundEvents;
 
 public class ReforgeTableButton extends Button {
-    private final boolean canProcess;
 
-    protected ReforgeTableButton(int pX, int pY, int pWidth, int pHeight, Component pMessage, OnPress pOnPress, CreateNarration pCreateNarration, boolean canProcess) {
+    protected ReforgeTableButton(int pX, int pY, int pWidth, int pHeight, Component pMessage, OnPress pOnPress, CreateNarration pCreateNarration) {
         super(pX, pY, pWidth, pHeight, pMessage, pOnPress, pCreateNarration);
-        this.canProcess = canProcess;
     }
 
     @Override
@@ -27,8 +28,15 @@ public class ReforgeTableButton extends Button {
 
     @Override
     public void onPress() {
-        if (canProcess) {
+        if (this.active) {
             super.onPress();
+        }
+    }
+
+    @Override
+    public void playDownSound(SoundManager pHandler) {
+        if (this.active){
+            pHandler.play(SimpleSoundInstance.forUI(SoundEvents.ANVIL_PLACE, 1.0F));
         }
     }
 }

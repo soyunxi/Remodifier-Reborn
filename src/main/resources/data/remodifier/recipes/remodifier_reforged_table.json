@@ -1,0 +1,19 @@
+{
+  "type": "crafting_shaped",
+  "key": {
+    "A": {
+      "item": "minecraft:copper_ingot"
+    },
+    "B": {
+      "tag": "minecraft:planks"
+    }
+  },
+  "pattern": [
+    "AA",
+    "BB",
+    "BB"
+  ],
+  "result": {
+    "item": "remodifier:reforged_table"
+  }
+}

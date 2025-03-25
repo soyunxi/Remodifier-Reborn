@@ -7,7 +7,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.yunxi.remodifier.Remodifier;
 import org.yunxi.remodifier.common.block.ReforgedTableBlockEntity;
@@ -25,7 +25,6 @@ public class ReforgeTableScreen extends AbstractContainerScreen<ReforgeTableCont
     private static final int GUI_WIDTH = 176;
     private static final int GUI_HEIGHT = 166;
 
-    // 修改按钮纹理坐标和尺寸
     private static final int BUTTON_X_TEXTURE = 0;
     private static final int BUTTON_Y_NORMAL = 166;
     private static final int BUTTON_Y_HOVER = 186;
@@ -60,28 +59,72 @@ public class ReforgeTableScreen extends AbstractContainerScreen<ReforgeTableCont
                 BUTTON_HEIGHT,
                 Component.literal(""),
                 this::onPress,
-                this::createNarrationMessage,
-                menu.getReforgedTableBlockEntity().canProcess());
+                this::createNarrationMessage);
         this.addRenderableWidget(button);
+    }
+
+
+    @Override
+    protected void renderLabels(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY) {
+        int titleWidth = this.font.width(this.title);
+        MutableComponent literal = Component.literal("" + menu.getReforgedTableBlockEntity().canProcess());
+        pGuiGraphics.drawString(
+                this.font,
+                this.title,
+                (this.imageWidth - titleWidth) / 2,
+                6,
+                0x404040,
+                false
+        );
+
     }
 
     @Override
     public void render(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
-        this.renderBackground(pGuiGraphics);
+        renderBackground(pGuiGraphics);
+        this.button.active = menu.getReforgedTableBlockEntity().canProcess();
         super.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick);
+        if (isHoveringButton(pMouseX, pMouseY) && button.active) {
+            ItemStack firstItem = menu.getReforgedTableBlockEntity().getIItemStackHandler().getStackInSlot(0);
+            if (!firstItem.isEmpty()) {
+                pGuiGraphics.renderTooltip(
+                        this.font,
+                        firstItem,
+                        pMouseX,
+                        pMouseY
+                );
+            }
+        }
+
         this.renderTooltip(pGuiGraphics, pMouseX, pMouseY);
     }
-
-    @Override
-    protected void renderBg(GuiGraphics guiGraphics, float v, int i, int i1) {
+    private boolean isHoveringButton(int mouseX, int mouseY) {
         int relX = (this.width - this.imageWidth) / 2;
         int relY = (this.height - this.imageHeight) / 2;
-        guiGraphics.blit(GUI, relX, relY, 0, 0, this.imageWidth, this.imageHeight);
-        renderButton(guiGraphics, i, i1);
+        return mouseX >= relX + BUTTON_X_POS &&
+                mouseX < relX + BUTTON_X_POS + BUTTON_WIDTH &&
+                mouseY >= relY + BUTTON_Y_POS &&
+                mouseY < relY + BUTTON_Y_POS + BUTTON_HEIGHT;
+    }
+
+
+
+    @Override
+    protected void renderBg(GuiGraphics guiGraphics, float partialTick, int mouseX, int mouseY) {
+        int relX = (this.width - this.imageWidth) / 2;
+        int relY = (this.height - this.imageHeight) / 2;
+        guiGraphics.blit(
+                GUI,
+                relX, relY,
+                GUI_X_TEXTURE, GUI_Y_TEXTURE,
+                GUI_WIDTH, GUI_HEIGHT
+        );
+        renderButton(guiGraphics, mouseX, mouseY);
         if (!menu.getReforgedTableBlockEntity().canProcess()) {
             renderIcon(guiGraphics);
         }
     }
+
 
     private void renderButton(GuiGraphics graphics, int mouseX, int mouseY) {
         int relX = (this.width - this.imageWidth) / 2;
@@ -99,13 +142,13 @@ public class ReforgeTableScreen extends AbstractContainerScreen<ReforgeTableCont
             yTexture = isHovering ? BUTTON_Y_DISABLED_HOVER : BUTTON_Y_DISABLED;
         }
 
-        graphics.blit(GUI,
+        graphics.blit(
+                GUI,
                 relX + BUTTON_X_POS,
                 relY + BUTTON_Y_POS,
-                BUTTON_X_TEXTURE,
-                yTexture,
-                BUTTON_WIDTH,
-                BUTTON_HEIGHT);
+                BUTTON_X_TEXTURE, yTexture,
+                BUTTON_WIDTH, BUTTON_HEIGHT
+        );
     }
 
     private void renderIcon(GuiGraphics graphics) {
@@ -123,8 +166,8 @@ public class ReforgeTableScreen extends AbstractContainerScreen<ReforgeTableCont
         }
     }
 
-
     public void onPress(Button button) {
         NetworkHandler.sendToServer(new ReforgeTableButtonPacket(menu.getPos()));
     }
+
 }

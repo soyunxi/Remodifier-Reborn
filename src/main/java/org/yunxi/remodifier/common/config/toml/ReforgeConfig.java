@@ -14,8 +14,8 @@ public class ReforgeConfig {
     static {
         ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
         builder.push("Remodifier");
-        UNIVERSAL_REFORGE_ITEM = builder.comment("Universal reforge item").defineList("universalReforgeItem", Lists.newArrayList("minecraft:copper_ingot", "minecraft:iron_ingot", "minecraft:gold_ingot", "minecraft:diamond", "minecraft:netherite_ingot"), o -> true);
-        UNIVERSAL_REFORGE_ITEM_RARITY = builder.comment("Universal reforge item rarity").defineList("universalReforgeItemRarity", Lists.newArrayList("1", "2", "3", "4", "5"), o -> true);
+        UNIVERSAL_REFORGE_ITEM = builder.comment("Universal reforge item").defineList("universalReforgeItem", Lists.newArrayList("minecraft:gold_ingot", "minecraft:diamond"), o -> true);
+        UNIVERSAL_REFORGE_ITEM_RARITY = builder.comment("Universal reforge item rarity").defineList("universalReforgeItemRarity", Lists.newArrayList("0", "0"), o -> true);
         DISABLE_REPAIR_REFORGED = builder.define("DisableRepairingReforging", false);
         builder.pop();
         CONFIG = builder.build();

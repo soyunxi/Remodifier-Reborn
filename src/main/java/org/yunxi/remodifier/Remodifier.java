@@ -11,13 +11,11 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.extensions.IForgeMenuType;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
-import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModList;
@@ -49,13 +47,10 @@ import org.yunxi.remodifier.common.modifier.Modifiers;
 import org.yunxi.remodifier.common.network.NetworkHandler;
 
 
-// The value here should match an entry in the META-INF/mods.toml file
 @Mod(Remodifier.MODID)
 public class Remodifier {
 
-    // Define mod id in a common place for everything to reference
     public static final String MODID = "remodifier";
-    // Directly reference a slf4j logger
     public static final Logger LOGGER = LogUtils.getLogger();
     public static final DeferredRegister<Block> BLOCK_DEFERRED_REGISTER = DeferredRegister.create(ForgeRegistries.BLOCKS, MODID);
     public static final RegistryObject<Block> REFORGED_TABLE;
@@ -97,10 +92,6 @@ public class Remodifier {
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
-        // Some common setup code
-        LOGGER.info("HELLO FROM COMMON SETUP");
-        LOGGER.info("DIRT BLOCK >> {}", ForgeRegistries.BLOCKS.getKey(Blocks.DIRT));
-
         new JsonConfigInitialier().init();
         Modifiers.initialize();
         event.enqueueWork(() -> {
@@ -116,17 +107,8 @@ public class Remodifier {
         });
     }
 
-    // Add the example block item to the building blocks tab
     private void addCreative(BuildCreativeModeTabContentsEvent event) {
     }
-
-    // You can use SubscribeEvent and let the Event Bus discover methods to call
-    @SubscribeEvent
-    public void onServerStarting(ServerStartingEvent event) {
-        // Do something when the server starts
-        LOGGER.info("HELLO from server starting");
-    }
-
 
     @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
     public static class ModEvents {
@@ -143,7 +125,6 @@ public class Remodifier {
         }
     }
 
-    // You can use EventBusSubscriber to automatically register all static methods in the class annotated with @SubscribeEvent
     @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
     public static class ClientModEvents {
 
@@ -163,9 +144,6 @@ public class Remodifier {
     public static boolean isCuriosLoaded() {
         if (isCuriosLoaded == null) isCuriosLoaded = ModList.get().isLoaded("curios");
         return isCuriosLoaded;
-    }
-
-    private void setup(final FMLCommonSetupEvent event) {
     }
 
     static {
