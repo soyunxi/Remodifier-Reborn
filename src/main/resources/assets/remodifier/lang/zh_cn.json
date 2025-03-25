@@ -6,6 +6,7 @@
   "item.remodifier.modifier_book.tooltip.1": "§d仅限于创造模式.",
   "item.remodifier.modifier_book.tooltip.invalid": "§d无效的词缀",
   "block.remodifier.reforged_table": "重铸台",
+  "screen.remodifier.reforged_table": "重铸",
   "remodifier.curio.wrong_slot": "不可启用",
   "remodifier.curio.active": "忙碌的",
   "misc.remodifier.modifier_prefix": "词缀名: ",

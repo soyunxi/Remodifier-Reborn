@@ -22,6 +22,7 @@ import net.minecraftforge.items.wrapper.CombinedInvWrapper;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
 import org.yunxi.remodifier.Remodifier;
+import org.yunxi.remodifier.client.ReforgeTableContainer;
 import org.yunxi.remodifier.common.config.toml.ReforgeConfig;
 import org.yunxi.remodifier.common.modifier.Modifier;
 import org.yunxi.remodifier.common.modifier.ModifierHandler;
@@ -29,11 +30,12 @@ import org.yunxi.remodifier.common.modifier.ModifierHandler;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
-public class ReforgedTableBlockEntity extends BlockEntity {
+public class ReforgedTableBlockEntity extends BlockEntity implements MenuProvider {
 
-    private final ItemStackHandler itemStackHandler = new ItemStackHandler(1) {
+    private final ItemStackHandler itemStackHandler = new ItemStackHandler(2) {
         @Override
         protected void onContentsChanged(int slot) {
             setChanged();
@@ -49,7 +51,7 @@ public class ReforgedTableBlockEntity extends BlockEntity {
         return itemStackHandler;
     }
 
-
+    public static final String REFORGED_TABLE_BLOCK_ENTITY = "screen.remodifier.reforged_table";
 
     @Override
     protected void saveAdditional(CompoundTag pTag) {
@@ -68,7 +70,16 @@ public class ReforgedTableBlockEntity extends BlockEntity {
     public void startProcessing() {
         ItemStack rollItem = itemStackHandler.getStackInSlot(0).copy();
         ItemStack reforgeItem = itemStackHandler.getStackInSlot(1).copy();
-        Modifier modifier = ModifierHandler.getModifier(reforgeItem);
+        if (canProcess()) {
+            Modifier modifier = ModifierHandler.rollModifier(rollItem, ThreadLocalRandom.current());
+            if (modifier != null) {
+                ModifierHandler.setModifier(reforgeItem, modifier);
+                if (ModifierHandler.hasModifier(rollItem)) {
+                    reforgeItem.shrink(1);
+                    itemStackHandler.setStackInSlot(1, reforgeItem);
+                }
+            }
+        }
 
     }
 
@@ -78,6 +89,7 @@ public class ReforgedTableBlockEntity extends BlockEntity {
         if (rollItem.isEmpty() || reforgeItem.isEmpty()) {
             return false;
         }
+        if (ModifierHandler.canHaveModifiers(reforgeItem)) return false;
         if (!ReforgeConfig.DISABLE_REPAIR_REFORGED.get()) {
             return rollItem.getItem().isValidRepairItem(rollItem, reforgeItem);
         }
@@ -90,5 +102,15 @@ public class ReforgedTableBlockEntity extends BlockEntity {
             }
         }
         return reforgeItems.contains(reforgeItem.getItem());
+    }
+
+    @Override
+    public Component getDisplayName() {
+        return Component.translatable(REFORGED_TABLE_BLOCK_ENTITY);
+    }
+
+    @Override
+    public @Nullable AbstractContainerMenu createMenu(int i, Inventory inventory, Player player) {
+        return new ReforgeTableContainer(i, player, getBlockPos());
     }
 }

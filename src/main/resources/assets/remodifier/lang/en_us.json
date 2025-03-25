@@ -6,6 +6,7 @@
 	"item.remodifier.modifier_book.tooltip.1": "§dOnly available in creative mode.",
 	"item.remodifier.modifier_book.tooltip.invalid": "§dInvalid modifier",
 	"block.remodifier.reforged_table": "Reforged Table",
+	"screen.remodifier.reforged_table": "Reforged",
 	"remodifier.curio.wrong_slot": "not enabled for slot type",
 	"remodifier.curio.active": "active",
 	"misc.remodifier.modifier_prefix": "Modifier: ",

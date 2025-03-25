@@ -15,14 +15,29 @@ import org.yunxi.remodifier.common.block.ReforgedTableBlockEntity;
 public class ReforgeTableContainer extends AbstractContainerMenu {
     private final BlockPos pos;
 
+    private final Player player;
+
     public ReforgeTableContainer(int pContainerId, Player player, BlockPos pos) {
         super(Remodifier.REFORGED_TABLE_MENU.get(), pContainerId);
         this.pos = pos;
+        this.player = player;
         if (player.level().getBlockEntity(pos) instanceof ReforgedTableBlockEntity reforgedTableBlockEntity) {
             addSlot(new SlotItemHandler(reforgedTableBlockEntity.getIItemStackHandler(), 0, 27, 47));
             addSlot(new SlotItemHandler(reforgedTableBlockEntity.getIItemStackHandler(), 1, 76, 47));
         }
-        layoutPlayerInventorySlots(player.getInventory(), 7, 84);
+        layoutPlayerInventorySlots(player.getInventory(), 8, 84);
+    }
+
+    public ReforgedTableBlockEntity getReforgedTableBlockEntity() {
+        return (ReforgedTableBlockEntity) player.level().getBlockEntity(pos);
+    }
+
+    public BlockPos getPos() {
+        return pos;
+    }
+
+    public Player getPlayer() {
+        return player;
     }
 
     private int addSlotRange(Container playerInventory, int index, int x, int y, int amount, int dx) {

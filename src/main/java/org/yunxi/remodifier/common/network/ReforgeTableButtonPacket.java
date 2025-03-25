@@ -27,7 +27,7 @@ public class ReforgeTableButtonPacket {
             if (player != null) {
                 Level level = player.level();
                 if (level.getBlockEntity(pos) instanceof ReforgedTableBlockEntity container) {
-
+                    container.startProcessing();
                 }
             }
         });

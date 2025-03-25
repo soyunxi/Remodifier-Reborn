@@ -1,6 +1,7 @@
 package org.yunxi.remodifier;
 
 import com.mojang.logging.LogUtils;
+import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -33,6 +34,7 @@ import net.minecraftforge.registries.RegisterEvent;
 import net.minecraftforge.registries.RegistryObject;
 import org.slf4j.Logger;
 import org.yunxi.remodifier.client.ReforgeTableContainer;
+import org.yunxi.remodifier.client.ReforgeTableScreen;
 import org.yunxi.remodifier.client.events.ClientEvents;
 import org.yunxi.remodifier.common.block.ReforgedTableBlock;
 import org.yunxi.remodifier.common.block.ReforgedTableBlockEntity;
@@ -147,6 +149,12 @@ public class Remodifier {
 
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {
+            event.enqueueWork(() -> {
+                MenuScreens.register(
+                        Remodifier.REFORGED_TABLE_MENU.get(),
+                        ReforgeTableScreen::new // 确保构造函数匹配
+                );
+            });
         }
     }
 
