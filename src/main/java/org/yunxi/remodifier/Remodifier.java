@@ -5,6 +5,7 @@ import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
@@ -16,6 +17,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.extensions.IForgeMenuType;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
+import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModList;
@@ -34,6 +36,7 @@ import org.slf4j.Logger;
 import org.yunxi.remodifier.client.ReforgeTableContainer;
 import org.yunxi.remodifier.client.ReforgeTableScreen;
 import org.yunxi.remodifier.client.events.ClientEvents;
+import org.yunxi.remodifier.common.attribute.Attributes;
 import org.yunxi.remodifier.common.block.ReforgedTableBlock;
 import org.yunxi.remodifier.common.block.ReforgedTableBlockEntity;
 import org.yunxi.remodifier.common.config.JsonConfigInitialier;
@@ -73,6 +76,7 @@ public class Remodifier {
         ITEM_DEFERRED_REGISTER.register(modEventBus);
         BLOCK_ENTITY_TYPE_DEFERRED_REGISTER.register(modEventBus);
         MENU_DEFERRED_REGISTER.register(modEventBus);
+        Attributes.ATTRIBUTE_DEFERRED_REGISTER.register(modEventBus);
 
 
         modEventBus.addListener(this::commonSetup);
@@ -123,6 +127,13 @@ public class Remodifier {
                     .title(Component.translatable("itemGroup.remodifier.books"))
                     .build());
         }
+
+        @SubscribeEvent
+        public static void applyAttribs(EntityAttributeModificationEvent event) {
+            event.add(EntityType.PLAYER, Attributes.CRITICAL_HIT.get());
+            event.add(EntityType.PLAYER, Attributes.CRITICAL_DAMAGE.get());
+        }
+
     }
 
     @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)

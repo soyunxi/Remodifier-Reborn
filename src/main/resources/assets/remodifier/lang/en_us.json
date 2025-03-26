@@ -10,6 +10,9 @@
 	"remodifier.curio.wrong_slot": "not enabled for slot type",
 	"remodifier.curio.active": "active",
 	"misc.remodifier.modifier_prefix": "Modifier: ",
+
+	"attributeslib.value.percent": "%s%%",
+
 	"modifier.remodifier.none": "None",
 	"modifier.remodifier.none.info": "No modifier",
 	"modifier.remodifier.half_hearted": "Half-hearted",

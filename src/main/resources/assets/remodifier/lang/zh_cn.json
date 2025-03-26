@@ -9,6 +9,14 @@
   "remodifier.curio.wrong_slot": "不可启用",
   "remodifier.curio.active": "忙碌的",
   "misc.remodifier.modifier_prefix": "词缀名: ",
+
+  "attributeslib.value.percent": "%s%%",
+
+  "attribute.remodifier.crit_chance": "暴击率",
+  "attribute.remodifier.crit_chance.desc": "你造成更高伤害的几率，溢出的暴击率会转化为暴击伤害。",
+  "attribute.remodifier.crit_damage": "暴击伤害",
+  "attribute.remodifier.crit_damage.desc": "暴击的伤害乘数",
+
   "modifier.remodifier.none": "无",
   "modifier.remodifier.none.info": "没有词缀",
   "modifier.remodifier.half_hearted": "半心",
