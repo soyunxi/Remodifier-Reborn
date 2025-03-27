@@ -132,6 +132,7 @@ public class Remodifier {
         public static void applyAttribs(EntityAttributeModificationEvent event) {
             event.add(EntityType.PLAYER, Attributes.CRITICAL_HIT.get());
             event.add(EntityType.PLAYER, Attributes.CRITICAL_DAMAGE.get());
+            event.add(EntityType.PLAYER, Attributes.NO_CONSUMPTION.get());
         }
 
     }

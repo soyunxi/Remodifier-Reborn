@@ -16,6 +16,8 @@
   "attribute.remodifier.crit_chance.desc": "你造成更高伤害的几率，溢出的暴击率会转化为暴击伤害。",
   "attribute.remodifier.crit_damage": "暴击伤害",
   "attribute.remodifier.crit_damage.desc": "暴击的伤害乘数",
+  "attribute.remodifier.no_consumption": "节省弹药",
+  "attribute.remodifier.no_consumption.desc": "不消耗弹药的几率",
 
   "modifier.remodifier.none": "无",
   "modifier.remodifier.none.info": "没有词缀",

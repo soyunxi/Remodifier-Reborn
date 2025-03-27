@@ -15,4 +15,7 @@ public class Attributes {
     public static final RegistryObject<Attribute> CRITICAL_DAMAGE = ATTRIBUTE_DEFERRED_REGISTER.register("crit_damage",
             () -> new BasedAttribute("attribute.remodifier.crit_damage", 2.0, 1, 1000).setSyncable(true));
 
+    public static final RegistryObject<Attribute> NO_CONSUMPTION = ATTRIBUTE_DEFERRED_REGISTER.register("no_consumption",
+            () ->new BasedAttribute("attribute.remodifier.no_consumption", 0, 0, 1).setSyncable(true));
+
 }

@@ -1,17 +1,26 @@
 package org.yunxi.remodifier.common.events;
 
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityEvent;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.AnvilUpdateEvent;
+import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import org.yunxi.remodifier.common.attribute.Attributes;
 import org.yunxi.remodifier.common.item.ModifierBookItem;
 import org.yunxi.remodifier.common.modifier.Modifier;
 import org.yunxi.remodifier.common.modifier.ModifierHandler;
 import org.yunxi.remodifier.common.modifier.Modifiers;
 
+import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class CommonEvents {
@@ -45,5 +54,24 @@ public class CommonEvents {
             ModifierHandler.setModifier(to, toMod);
         }
         ModifierHandler.applyEquipmentModifier(event.getEntity(), toMod, slotType);
+    }
+
+    @SubscribeEvent
+    public static void onEntityJoinLevel(EntityJoinLevelEvent event) {
+        Entity entity = event.getEntity();
+        if (entity instanceof AbstractArrow arrow) {
+            if (arrow.getOwner() instanceof Player player) {
+                ItemStack mainHandItem = player.getMainHandItem();
+                CompoundTag orCreateTag = mainHandItem.getOrCreateTag();
+                double random = orCreateTag.getDouble("random");
+                AttributeInstance attribute = player.getAttribute(Attributes.NO_CONSUMPTION.get());
+                if (attribute != null) {
+                    if (attribute.getValue() >= random) {
+                        arrow.pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
+                        orCreateTag.remove("random");
+                    }
+                }
+            }
+        }
     }
 }

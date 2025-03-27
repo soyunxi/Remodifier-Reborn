@@ -5,6 +5,8 @@
   "compatibilityLevel": "JAVA_17",
   "refmap": "remodifier.refmap.json",
   "mixins": [
+    "BowItemMixin",
+    "CrossbowItemMixin",
     "ItemStackMixin"
   ],
   "client": [
