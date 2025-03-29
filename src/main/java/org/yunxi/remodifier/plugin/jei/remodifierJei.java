@@ -7,12 +7,13 @@ import mezz.jei.api.registration.ISubtypeRegistration;
 import net.minecraft.resources.ResourceLocation;
 import org.yunxi.remodifier.Remodifier;
 
+@SuppressWarnings("removal")
 @JeiPlugin
 public class remodifierJei implements IModPlugin {
 
     @Override
     public ResourceLocation getPluginUid() {
-        return ResourceLocation.fromNamespaceAndPath("remodifier", "jei");
+        return new ResourceLocation("remodifier", "jei");
     }
 
     @Override

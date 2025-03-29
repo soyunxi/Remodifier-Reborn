@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
+@SuppressWarnings("removal")
 public class ModifierHandler {
     public static final long COMMON_SEGMENT_CURIO = (0x7a6ca76cL) << 32;
     public static final long COMMON_SEGMENT_EQUIPMENT = 0x9225d5c4fd8d434bL;
@@ -54,7 +55,7 @@ public class ModifierHandler {
         CompoundTag tag = stack.getTag();
         if (tag == null) return null;
         if (!tag.contains(tagName)) return null;
-        return Modifiers.MODIFIERS.get(ResourceLocation.parse(tag.getString(tagName)));
+        return Modifiers.MODIFIERS.get(new ResourceLocation(tag.getString(tagName)));
     }
 
     public static UUID getCurioUuid(String identifier, int slot, int attributeIndex) {

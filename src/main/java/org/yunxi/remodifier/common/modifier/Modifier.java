@@ -87,6 +87,7 @@ public class Modifier {
         return lines;
     }
 
+    @SuppressWarnings("removal")
     public static class ModifierBuilder {
         int weight = 100;
         int rarity = 1;
@@ -119,7 +120,7 @@ public class Modifier {
         public ModifierBuilder addModifiers(String @NotNull [] attribute, AttributeModifierSupplier[] modifier) {
             for (int index = 0; index < attribute.length; index++) {
                 String entityAttribute = attribute[index];
-                Attribute registryAttribute = ForgeRegistries.ATTRIBUTES.getValue(ResourceLocation.parse(entityAttribute));
+                Attribute registryAttribute = ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(entityAttribute));
                 if (registryAttribute == null) {
                     throw new RuntimeException("Invalid key: " + entityAttribute);
                 }

@@ -8,10 +8,16 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.item.BowItem;
+import net.minecraft.world.item.CrossbowItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.AnvilUpdateEvent;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
+import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
+import net.minecraftforge.event.entity.player.ArrowLooseEvent;
+import net.minecraftforge.event.entity.player.ArrowNockEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import org.yunxi.remodifier.common.attribute.Attributes;
@@ -23,12 +29,13 @@ import org.yunxi.remodifier.common.modifier.Modifiers;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
+@SuppressWarnings("removal")
 public class CommonEvents {
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void onAnvilUpdate(AnvilUpdateEvent event) {
         ItemStack right = event.getRight();
         if (right.getItem() instanceof ModifierBookItem && ModifierHandler.canHaveModifiers(event.getLeft()) && right.getTag() != null) {
-            Modifier modifier = Modifiers.MODIFIERS.get(ResourceLocation.parse(right.getTag().getString(ModifierHandler.bookTagName)));
+            Modifier modifier = Modifiers.MODIFIERS.get(new ResourceLocation(right.getTag().getString(ModifierHandler.bookTagName)));
             if (modifier != null) {
                 ItemStack output = event.getLeft().copy();
                 ModifierHandler.setModifier(output, modifier);
@@ -62,13 +69,17 @@ public class CommonEvents {
         if (entity instanceof AbstractArrow arrow) {
             if (arrow.getOwner() instanceof Player player) {
                 ItemStack mainHandItem = player.getMainHandItem();
-                CompoundTag orCreateTag = mainHandItem.getOrCreateTag();
-                double random = orCreateTag.getDouble("random");
-                AttributeInstance attribute = player.getAttribute(Attributes.NO_CONSUMPTION.get());
-                if (attribute != null) {
-                    if (attribute.getValue() >= random) {
-                        arrow.pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
-                        orCreateTag.remove("random");
+                if (mainHandItem.getItem() instanceof CrossbowItem) {
+                    CompoundTag orCreateTag = mainHandItem.getOrCreateTag();
+                    if (orCreateTag.contains("random")) {
+                        double random = orCreateTag.getDouble("random");
+                        AttributeInstance attribute = player.getAttribute(Attributes.NO_CONSUMPTION.get());
+                        if (attribute != null) {
+                            if (attribute.getValue() >= random) {
+                                arrow.pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
+                                orCreateTag.remove("random");
+                            }
+                        }
                     }
                 }
             }

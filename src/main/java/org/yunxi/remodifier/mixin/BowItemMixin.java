@@ -8,7 +8,9 @@ import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.yunxi.remodifier.common.attribute.Attributes;
 
 import java.util.Random;
@@ -24,5 +26,10 @@ public class BowItemMixin {
             return true;
         }
         return instance.isInfinite(stack, bow, player);
+    }
+
+    @Inject(method = "getUseDuration", at = @At("HEAD"), cancellable = true)
+    public void getUseDuration(ItemStack pStack, CallbackInfoReturnable<Integer> cir) {
+        cir.setReturnValue(3);
     }
 }

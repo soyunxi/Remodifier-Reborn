@@ -16,10 +16,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+@SuppressWarnings("removal")
 public class Modifiers {
     public static final Map<ResourceLocation, Modifier> MODIFIERS = new Object2ObjectOpenHashMap<>();
 
-    public static final Modifier NONE = new Modifier.ModifierBuilder(ResourceLocation.fromNamespaceAndPath(Remodifier.MODID, "none"), "modifier_none", ModifierType.BOTH).setWeight(0).setRarity(-1).build();
+    public static final Modifier NONE = new Modifier.ModifierBuilder(new ResourceLocation(Remodifier.MODID, "none"), "modifier_none", ModifierType.BOTH).setWeight(0).setRarity(-1).build();
 
     static {
         MODIFIERS.put(NONE.name, NONE);
@@ -41,12 +42,12 @@ public class Modifiers {
 
     @Contract("_ -> new")
     private static Modifier.@NotNull ModifierBuilder equipped(String name) {
-        return new Modifier.ModifierBuilder(ResourceLocation.fromNamespaceAndPath(Remodifier.MODID, name), "modifier_" + name, ModifierType.EQUIPPED);
+        return new Modifier.ModifierBuilder(new ResourceLocation(Remodifier.MODID, name), "modifier_" + name, ModifierType.EQUIPPED);
     }
 
     @Contract("_ -> new")
     private static Modifier.@NotNull ModifierBuilder held(String name) {
-        return new Modifier.ModifierBuilder(ResourceLocation.fromNamespaceAndPath(Remodifier.MODID, name), "modifier_" + name, ModifierType.HELD);
+        return new Modifier.ModifierBuilder(new ResourceLocation(Remodifier.MODID, name), "modifier_" + name, ModifierType.HELD);
     }
 
     private static void addCurio(Modifier modifier) {
@@ -113,7 +114,7 @@ public class Modifiers {
                 String[] operations_ids = operations_id.split(";");
                 addBow(held(name).addModifiers(attributes, mods(amounts, operations_ids)).setWeight(Integer.parseInt(weight)).build());
             } else {
-                Attribute entityAttribute = ForgeRegistries.ATTRIBUTES.getValue(ResourceLocation.parse(attribute));
+                Attribute entityAttribute = ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(attribute));
                 if (entityAttribute == null) {
                     Remodifier.LOGGER.error("Invalid value: {}", attribute);
                     return;
@@ -143,7 +144,7 @@ public class Modifiers {
                 String[] operations_ids = operations_id.split(";");
                 addShield(held(name).addModifiers(attributes, mods(amounts, operations_ids)).setWeight(Integer.parseInt(weight)).build());
             } else {
-                Attribute entityAttribute = ForgeRegistries.ATTRIBUTES.getValue(ResourceLocation.parse(attribute));
+                Attribute entityAttribute = ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(attribute));
                 if (entityAttribute == null) {
                     Remodifier.LOGGER.error("Invalid value: {}", attribute);
                     return;
@@ -173,7 +174,7 @@ public class Modifiers {
                 String[] operations_ids = operations_id.split(";");
                 addTool(held(name).addModifiers(attributes, mods(amounts, operations_ids)).setWeight(Integer.parseInt(weight)).build());
             } else {
-                Attribute entityAttribute = ForgeRegistries.ATTRIBUTES.getValue(ResourceLocation.parse(attribute));
+                Attribute entityAttribute = ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(attribute));
                 if (entityAttribute == null) {
                     Remodifier.LOGGER.error("Invalid value: {}", attribute);
                     return;
@@ -203,7 +204,7 @@ public class Modifiers {
                 String[] operations_ids = operations_id.split(";");
                 addArmor(equipped(name).addModifiers(attributes, mods(amounts, operations_ids)).setWeight(Integer.parseInt(weight)).build());
             } else {
-                Attribute entityAttribute = ForgeRegistries.ATTRIBUTES.getValue(ResourceLocation.parse(attribute));
+                Attribute entityAttribute = ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(attribute));
                 if (entityAttribute == null) {
                     Remodifier.LOGGER.error("Invalid value: {}", attribute);
                     return;
@@ -233,7 +234,7 @@ public class Modifiers {
                 String[] operations_ids = operations_id.split(";");
                 addCurio(equipped(name).addModifiers(attributes, mods(amounts, operations_ids)).setWeight(Integer.parseInt(weight)).build());
             } else {
-                Attribute entityAttribute = ForgeRegistries.ATTRIBUTES.getValue(ResourceLocation.parse(attribute));
+                Attribute entityAttribute = ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(attribute));
                 if (entityAttribute == null) {
                     Remodifier.LOGGER.error("Invalid value: {}", attribute);
                     return;

@@ -10,12 +10,13 @@ import org.yunxi.remodifier.Remodifier;
 
 import java.util.Optional;
 
+@SuppressWarnings("removal")
 public class NetworkHandler {
     private static final String PROTOCOL_VERSION = "1";
     private static int packetId = 0;
 
     public static final SimpleChannel CHANNEL = NetworkRegistry.newSimpleChannel(
-            ResourceLocation.fromNamespaceAndPath(Remodifier.MODID, "main"),
+            new ResourceLocation(Remodifier.MODID, "main"),
             () -> PROTOCOL_VERSION,
             PROTOCOL_VERSION::equals,
             PROTOCOL_VERSION::equals

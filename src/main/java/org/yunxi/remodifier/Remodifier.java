@@ -114,11 +114,12 @@ public class Remodifier {
     private void addCreative(BuildCreativeModeTabContentsEvent event) {
     }
 
+    @SuppressWarnings("removal")
     @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
     public static class ModEvents {
         @SubscribeEvent
         public static void onRegister(RegisterEvent event) {
-            event.register(Registries.CREATIVE_MODE_TAB, ResourceLocation.fromNamespaceAndPath(MODID, "remodifier_books"), () -> CreativeModeTab.builder()
+            event.register(Registries.CREATIVE_MODE_TAB, new ResourceLocation(MODID, "remodifier_books"), () -> CreativeModeTab.builder()
                     .displayItems((itemDisplayParameters, output) -> {
                         output.accept(new ItemStack(REFORGED_TABLE_ITEM.get()));
                         ModifierBookItem.getStacks().forEach(output::accept);

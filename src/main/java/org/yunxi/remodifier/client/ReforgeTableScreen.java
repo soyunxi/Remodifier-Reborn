@@ -16,8 +16,9 @@ import org.yunxi.remodifier.common.network.ReforgeTableButtonPacket;
 
 import java.util.function.Supplier;
 
+@SuppressWarnings("removal")
 public class ReforgeTableScreen extends AbstractContainerScreen<ReforgeTableContainer> {
-    private final ResourceLocation GUI = ResourceLocation.fromNamespaceAndPath(Remodifier.MODID, "textures/gui/reforger.png");
+    private final ResourceLocation GUI = new ResourceLocation(Remodifier.MODID, "textures/gui/reforger.png");
     private Button button;
 
     private static final int GUI_X_TEXTURE = 0;

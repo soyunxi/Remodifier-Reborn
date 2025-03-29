@@ -1,8 +1,8 @@
 {
   "itemGroup.remodifier.books": "重铸",
   "item.remodifier.modifier_book": "词缀书",
-  "item.remodifier.modifier_book.tooltip.0": "§9通过锻造台重铸物品.",
-  "item.remodifier.modifier_book.tooltip.1": "§d仅限于创造模式.",
+  "item.remodifier.modifier_book.tooltip.0": "§9使用铁砧将物品的属性设置为此属性。",
+  "item.remodifier.modifier_book.tooltip.1": "§d仅限于创造模式。",
   "item.remodifier.modifier_book.tooltip.invalid": "§d无效的词缀",
   "block.remodifier.reforged_table": "重铸台",
   "screen.remodifier.reforged_table": "重铸",

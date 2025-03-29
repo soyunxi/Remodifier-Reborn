@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
+@SuppressWarnings("removal")
 public class ReforgedTableBlockEntity extends BlockEntity implements MenuProvider {
 
     private final ItemStackHandler itemStackHandler = new ItemStackHandler(2) {
@@ -93,7 +94,7 @@ public class ReforgedTableBlockEntity extends BlockEntity implements MenuProvide
         }
         List<Item> reforgeItems = new ArrayList<>();
         for (String s : ReforgeConfig.UNIVERSAL_REFORGE_ITEM.get()) {
-            ResourceLocation parse = ResourceLocation.parse(s);
+            ResourceLocation parse = new ResourceLocation(s);
             Item value = ForgeRegistries.ITEMS.getValue(parse);
             if (value != null) {
                 reforgeItems.add(value);

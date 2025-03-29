@@ -19,6 +19,7 @@ import org.yunxi.remodifier.common.modifier.Modifiers;
 
 import java.util.List;
 
+@SuppressWarnings("removal")
 public class ModifierBookItem extends Item {
     public ModifierBookItem() {
         super(new Item.Properties().rarity(Rarity.EPIC));
@@ -41,7 +42,7 @@ public class ModifierBookItem extends Item {
     public Component getName(ItemStack stack) {
         Component base = super.getName(stack);
         if (!stack.hasTag() || (stack.getTag() != null && !stack.getTag().contains(ModifierHandler.bookTagName))) return base;
-        Modifier mod = Modifiers.MODIFIERS.get(ResourceLocation.parse(stack.getTag().getString(ModifierHandler.bookTagName)));
+        Modifier mod = Modifiers.MODIFIERS.get(new ResourceLocation(stack.getTag().getString(ModifierHandler.bookTagName)));
         if (mod == null) return base;
         return Component.translatable("item.remodifier.modifier_book").append("：").append(mod.getFormattedName());
     }
@@ -50,7 +51,7 @@ public class ModifierBookItem extends Item {
     public void appendHoverText(ItemStack stack, @Nullable Level p_41422_, List<Component> tooltip, TooltipFlag p_41424_) {
         String translationKey = this.getDescriptionId();
         if (stack.getTag() != null && stack.getTag().contains(ModifierHandler.bookTagName)) {
-            Modifier mod = Modifiers.MODIFIERS.get(ResourceLocation.parse(stack.getTag().getString(ModifierHandler.bookTagName)));
+            Modifier mod = Modifiers.MODIFIERS.get(new ResourceLocation(stack.getTag().getString(ModifierHandler.bookTagName)));
             if (mod != null) {
                 tooltip.addAll(mod.getInfoLines());
                 tooltip.add(Component.translatable(translationKey + ".tooltip.0"));
