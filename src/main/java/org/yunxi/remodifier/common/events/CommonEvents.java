@@ -1,6 +1,7 @@
 package org.yunxi.remodifier.common.events;
 
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityEvent;
@@ -8,18 +9,16 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
-import net.minecraft.world.item.BowItem;
-import net.minecraft.world.item.CrossbowItem;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.*;
 import net.minecraftforge.event.AnvilUpdateEvent;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
+import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
-import net.minecraftforge.event.entity.player.ArrowLooseEvent;
-import net.minecraftforge.event.entity.player.ArrowNockEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.entity.player.*;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import org.yunxi.remodifier.common.attribute.AttributeHandler;
 import org.yunxi.remodifier.common.attribute.Attributes;
 import org.yunxi.remodifier.common.item.ModifierBookItem;
 import org.yunxi.remodifier.common.modifier.Modifier;
@@ -31,6 +30,8 @@ import java.util.concurrent.ThreadLocalRandom;
 
 @SuppressWarnings("removal")
 public class CommonEvents {
+    public static final Random random = new Random();
+
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void onAnvilUpdate(AnvilUpdateEvent event) {
         ItemStack right = event.getRight();
@@ -69,6 +70,10 @@ public class CommonEvents {
         if (entity instanceof AbstractArrow arrow) {
             if (arrow.getOwner() instanceof Player player) {
                 ItemStack mainHandItem = player.getMainHandItem();
+                if (mainHandItem.getItem() instanceof ProjectileWeaponItem) {
+                    arrow.setDeltaMovement(arrow.getDeltaMovement().scale(player.getAttribute(Attributes.BULLET_SPEED.get()).getValue()));
+                    arrow.setBaseDamage(arrow.getBaseDamage() * player.getAttribute(Attributes.BULLET_DAMAGE.get()).getValue());
+                }
                 if (mainHandItem.getItem() instanceof CrossbowItem) {
                     CompoundTag orCreateTag = mainHandItem.getOrCreateTag();
                     if (orCreateTag.contains("random")) {
@@ -84,5 +89,60 @@ public class CommonEvents {
                 }
             }
         }
+    }
+
+    @SubscribeEvent
+    public static void onLivingEntityUseItemTick(LivingEntityUseItemEvent.Tick event) {
+        if (event.getEntity() instanceof Player player) {
+            AttributeInstance attribute = player.getAttribute(Attributes.POWER_SPEED.get());
+            if (attribute.getValue() != 1 ||event.getItem().getItem() instanceof ProjectileWeaponItem) {
+                double temp = attribute.getValue() - 1;
+                int offset = -1;
+                if (temp < (double)0.0F) {
+                    offset = 1;
+                    temp = -temp;
+                }
+
+                while(temp > (double)1.0F) {
+                    event.setDuration(event.getDuration() + offset);
+                    --temp;
+                }
+
+                if (temp > (double)0.5F) {
+                    if (event.getEntity().tickCount % 2 == 0) {
+                        event.setDuration(event.getDuration() + offset);
+                    }
+
+                    temp -= (double)0.5F;
+                }
+
+                int mod = (int)Math.floor((double)1.0F / Math.min((double)1.0F, temp));
+                if (event.getEntity().tickCount % mod == 0) {
+                    event.setDuration(event.getDuration() + offset);
+                }
+
+                --temp;
+            }
+        }
+    }
+
+    @SubscribeEvent(priority = EventPriority.LOWEST)
+    public static void onLivingDamage(LivingDamageEvent event) {
+        Entity entity = event.getSource().getEntity();
+        if (entity instanceof Player player) {
+            double criticalDamageCoefficients = AttributeHandler.getCriticalDamageCoefficients(player);
+            AttributeInstance attribute = player.getAttribute(Attributes.CRITICAL_HIT.get());
+            double v = random.nextDouble(1);
+            if (v <= attribute.getValue()) {
+                event.setAmount((float) (event.getAmount() * criticalDamageCoefficients));
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onCriticalHit(CriticalHitEvent event) {
+        Player player = event.getEntity();
+        double criticalDamageCoefficients = AttributeHandler.getCriticalDamageCoefficients(player);
+        event.setDamageModifier((float) criticalDamageCoefficients);
     }
 }

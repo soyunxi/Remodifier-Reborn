@@ -27,9 +27,4 @@ public class BowItemMixin {
         }
         return instance.isInfinite(stack, bow, player);
     }
-
-    @Inject(method = "getUseDuration", at = @At("HEAD"), cancellable = true)
-    public void getUseDuration(ItemStack pStack, CallbackInfoReturnable<Integer> cir) {
-        cir.setReturnValue(3);
-    }
 }
