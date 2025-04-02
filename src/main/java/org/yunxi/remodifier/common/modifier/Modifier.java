@@ -14,6 +14,7 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.yunxi.remodifier.common.attribute.PercentageFormattable;
 
 import java.util.List;
 import java.util.UUID;
@@ -56,13 +57,20 @@ public class Modifier {
         } else {
             temp = amount * 100d;
         }
-
-        if (amount > 0) {
-            return Component.translatable("attribute.modifier.plus." + modifierSupplier.operation.toValue(), ATTRIBUTE_MODIFIER_FORMAT.format(temp),
-                    Component.translatable(entry.getKey().getDescriptionId())).setStyle(Style.EMPTY.applyFormat(ChatFormatting.BLUE));
-        } else if (amount < 0) {
-            return Component.translatable("attribute.modifier.take." + modifierSupplier.operation.toValue(), ATTRIBUTE_MODIFIER_FORMAT.format(Math.abs(temp)),
-                    Component.translatable(entry.getKey().getDescriptionId())).setStyle(Style.EMPTY.applyFormat(ChatFormatting.RED));
+        if (entry.getKey() instanceof PercentageFormattable && modifierSupplier.operation == AttributeModifier.Operation.ADDITION){
+            if (amount > 0) {
+                return Component.translatable("ttribute.remodifier.plus.0").setStyle(Style.EMPTY.applyFormat(ChatFormatting.BLUE));
+            } else if (amount < 0) {
+                return Component.translatable("ttribute.remodifier.take.0").setStyle(Style.EMPTY.applyFormat(ChatFormatting.RED));
+            }
+        } else {
+            if (amount > 0) {
+                return Component.translatable("attribute.modifier.plus." + modifierSupplier.operation.toValue(), ATTRIBUTE_MODIFIER_FORMAT.format(temp),
+                        Component.translatable(entry.getKey().getDescriptionId())).setStyle(Style.EMPTY.applyFormat(ChatFormatting.BLUE));
+            } else if (amount < 0) {
+                return Component.translatable("attribute.modifier.take." + modifierSupplier.operation.toValue(), ATTRIBUTE_MODIFIER_FORMAT.format(Math.abs(temp)),
+                        Component.translatable(entry.getKey().getDescriptionId())).setStyle(Style.EMPTY.applyFormat(ChatFormatting.RED));
+            }
         }
 
         return null;
