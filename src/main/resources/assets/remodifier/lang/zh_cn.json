@@ -10,7 +10,8 @@
   "remodifier.curio.active": "忙碌的",
   "misc.remodifier.modifier_prefix": "词缀名: ",
 
-  "attributeslib.value.percent": "%s%%",
+  "attribute.remodifier.plus.0": "+%s%% %s",
+  "attribute.remodifier.take.0": "-%s%% %s",
 
   "attribute.remodifier.crit_chance": "暴击率",
   "attribute.remodifier.crit_chance.desc": "你造成更高伤害的几率，溢出的暴击率会转化为暴击伤害。",
@@ -24,6 +25,8 @@
   "attribute.remodifier.bullet_speed.desc": "你使用远程武器的弹射物速度，三叉戟不被视作远程武器",
   "attribute.remodifier.bullet_damage": "弹射物伤害",
   "attribute.remodifier.bullet_damage.desc": "你使用远程武器的弹射物伤害，三叉戟不被视作远程武器",
+  "attribute.remodifier.life_steal": "生命窃取",
+  "attribute.remodifier.life_steal.desc": "你的攻击会造成额外的伤害，并且这部分伤害会用于治疗你",
 
   "modifier.remodifier.none": "无",
   "modifier.remodifier.none.info": "没有词缀",

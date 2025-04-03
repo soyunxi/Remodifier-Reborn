@@ -59,9 +59,11 @@ public class Modifier {
         }
         if (entry.getKey() instanceof PercentageFormattable && modifierSupplier.operation == AttributeModifier.Operation.ADDITION){
             if (amount > 0) {
-                return Component.translatable("ttribute.remodifier.plus.0").setStyle(Style.EMPTY.applyFormat(ChatFormatting.BLUE));
+                return Component.translatable("attribute.remodifier.plus.0", ATTRIBUTE_MODIFIER_FORMAT.format(temp * 100),
+                        Component.translatable(entry.getKey().getDescriptionId())).setStyle(Style.EMPTY.applyFormat(ChatFormatting.BLUE));
             } else if (amount < 0) {
-                return Component.translatable("ttribute.remodifier.take.0").setStyle(Style.EMPTY.applyFormat(ChatFormatting.RED));
+                return Component.translatable("attribute.remodifier.take.0", ATTRIBUTE_MODIFIER_FORMAT.format(Math.abs(temp * 100)),
+                        Component.translatable(entry.getKey().getDescriptionId())).setStyle(Style.EMPTY.applyFormat(ChatFormatting.RED));
             }
         } else {
             if (amount > 0) {

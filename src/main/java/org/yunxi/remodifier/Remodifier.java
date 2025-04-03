@@ -137,6 +137,7 @@ public class Remodifier {
             event.add(EntityType.PLAYER, Attributes.POWER_SPEED.get());
             event.add(EntityType.PLAYER, Attributes.BULLET_SPEED.get());
             event.add(EntityType.PLAYER, Attributes.BULLET_DAMAGE.get());
+            event.add(EntityType.PLAYER, Attributes.LIFE_STEAL.get());
         }
 
     }

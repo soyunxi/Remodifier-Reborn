@@ -5,6 +5,7 @@ import net.minecraft.world.entity.ai.attributes.RangedAttribute;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+import org.checkerframework.checker.units.qual.A;
 import org.spongepowered.asm.mixin.injection.At;
 import org.yunxi.remodifier.Remodifier;
 
@@ -32,4 +33,9 @@ public class Attributes {
     public static final RegistryObject<Attribute> LIFE_STEAL = ATTRIBUTE_DEFERRED_REGISTER.register("life_steal",
             () -> new RangedAttribute("attribute.remodifier.life_steal", 0, 0, 10000).setSyncable(true));
 
+    public static final RegistryObject<Attribute> VAMPIRE = ATTRIBUTE_DEFERRED_REGISTER.register("vampire",
+            () -> new BasedAttribute("attribute.remodifier.vampire", 0, 0, 10000).setSyncable(true));
+
+    public static final RegistryObject<Attribute> MINING_SPEED = ATTRIBUTE_DEFERRED_REGISTER.register("mining_speed",
+            () -> new BasedAttribute("attribute.remodifier.mining_speed", 1, 0, 1000).setSyncable(true));
 }

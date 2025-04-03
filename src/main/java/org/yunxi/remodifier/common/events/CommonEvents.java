@@ -136,6 +136,10 @@ public class CommonEvents {
             if (v <= attribute.getValue()) {
                 event.setAmount((float) (event.getAmount() * criticalDamageCoefficients));
             }
+            AttributeInstance lifeSteal = player.getAttribute(Attributes.LIFE_STEAL.get());
+            event.setAmount((float) (event.getAmount() + lifeSteal.getValue()));
+            player.heal((float) lifeSteal.getValue());
+
         }
     }
 
