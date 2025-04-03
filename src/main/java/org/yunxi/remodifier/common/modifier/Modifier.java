@@ -2,6 +2,7 @@ package org.yunxi.remodifier.common.modifier;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
@@ -82,6 +83,7 @@ public class Modifier {
         List<MutableComponent> lines = new ObjectArrayList<>();
         int size = modifiers.size();
         if (size < 1) return lines;
+//        I18n.get()
         if (size == 1) {
             MutableComponent description = getModifierDescription(modifiers.get(0));
             if (description == null) return lines;

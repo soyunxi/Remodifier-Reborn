@@ -6,6 +6,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityEvent;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
@@ -15,7 +16,9 @@ import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
+import net.minecraftforge.event.entity.living.LivingHealEvent;
 import net.minecraftforge.event.entity.player.*;
+import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import org.yunxi.remodifier.common.attribute.AttributeHandler;
@@ -140,6 +143,10 @@ public class CommonEvents {
             event.setAmount((float) (event.getAmount() + lifeSteal.getValue()));
             player.heal((float) lifeSteal.getValue());
 
+            AttributeInstance vampire = player.getAttribute(Attributes.VAMPIRE.get());
+            player.heal((float) (event.getAmount() * vampire.getValue()));
+
+
         }
     }
 
@@ -148,5 +155,21 @@ public class CommonEvents {
         Player player = event.getEntity();
         double criticalDamageCoefficients = AttributeHandler.getCriticalDamageCoefficients(player);
         event.setDamageModifier((float) criticalDamageCoefficients);
+    }
+
+    @SubscribeEvent
+    public static void onBreakSpeed(PlayerEvent.BreakSpeed event) {
+        Player player = event.getEntity();
+        AttributeInstance attribute = player.getAttribute(Attributes.MINING_SPEED.get());
+        event.setNewSpeed((float) (event.getOriginalSpeed() * attribute.getValue()));
+    }
+
+    @SubscribeEvent(priority = EventPriority.LOWEST)
+    public static void onLivingHeal(LivingHealEvent event) {
+        LivingEntity entity = event.getEntity();
+        if (entity instanceof Player player) {
+            AttributeInstance attribute = player.getAttribute(Attributes.HEALING_RECEIVED.get());
+            event.setAmount((float) (event.getAmount() * attribute.getValue()));
+        }
     }
 }

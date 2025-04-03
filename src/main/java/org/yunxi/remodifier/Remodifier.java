@@ -138,6 +138,9 @@ public class Remodifier {
             event.add(EntityType.PLAYER, Attributes.BULLET_SPEED.get());
             event.add(EntityType.PLAYER, Attributes.BULLET_DAMAGE.get());
             event.add(EntityType.PLAYER, Attributes.LIFE_STEAL.get());
+            event.add(EntityType.PLAYER, Attributes.VAMPIRE.get());
+            event.add(EntityType.PLAYER, Attributes.MINING_SPEED.get());
+            event.add(EntityType.PLAYER, Attributes.HEALING_RECEIVED.get());
         }
 
     }

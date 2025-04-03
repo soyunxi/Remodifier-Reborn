@@ -38,4 +38,7 @@ public class Attributes {
 
     public static final RegistryObject<Attribute> MINING_SPEED = ATTRIBUTE_DEFERRED_REGISTER.register("mining_speed",
             () -> new BasedAttribute("attribute.remodifier.mining_speed", 1, 0, 1000).setSyncable(true));
+
+    public static final RegistryObject<Attribute> HEALING_RECEIVED = ATTRIBUTE_DEFERRED_REGISTER.register("healing_received",
+            () -> new BasedAttribute("attribute.remodifier.mining_speed", 1, 0, 1000).setSyncable(true));
 }

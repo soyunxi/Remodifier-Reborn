@@ -27,6 +27,12 @@
   "attribute.remodifier.bullet_damage.desc": "你使用远程武器的弹射物伤害，三叉戟不被视作远程武器",
   "attribute.remodifier.life_steal": "生命窃取",
   "attribute.remodifier.life_steal.desc": "你的攻击会造成额外的伤害，并且这部分伤害会用于治疗你",
+  "attribute.remodifier.vampire": "吸血",
+  "attribute.remodifier.vampire.desc": "你的攻击的一部分伤害会用于治疗你",
+  "attribute.remodifier.mining_speed": "挖掘速度",
+  "attribute.remodifier.mining_speed.desc": "你的挖掘速度会乘该系数",
+  "attribute.remodifier.healing_received": "治疗系数",
+  "attribute.remodifier.healing_received.desc": "你的治疗量会乘该系数",
 
   "modifier.remodifier.none": "无",
   "modifier.remodifier.none.info": "没有词缀",
