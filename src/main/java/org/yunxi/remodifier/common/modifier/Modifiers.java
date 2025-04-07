@@ -32,8 +32,16 @@ public class Modifiers {
 
     public static final ModifierPool toolPool = new ModifierPool(stack -> {
         Item item = stack.getItem();
-        if (item instanceof SwordItem) return true;
+        if (WeaponModifiersConfig.WHETHER_OR_NOT_WEAPON_USE_TOOL_MODIFIERS.get() && item instanceof SwordItem) return true;
         return item instanceof DiggerItem;
+    });
+
+    public static final ModifierPool weaponPool = new ModifierPool(stack -> {
+        Item item = stack.getItem();
+        if (!WeaponModifiersConfig.WHETHER_OR_NOT_WEAPON_USE_TOOL_MODIFIERS.get()) {
+            return item instanceof SwordItem;
+        }
+        return false;
     });
 
     public static final ModifierPool bowPool = new ModifierPool(stack -> stack.getItem() instanceof ProjectileWeaponItem);
@@ -62,6 +70,11 @@ public class Modifiers {
     private static void addTool(Modifier modifier) {
         MODIFIERS.put(modifier.name, modifier);
         toolPool.add(modifier);
+    }
+
+    private static void addWeapon(Modifier modifier) {
+        MODIFIERS.put(modifier.name, modifier);
+        weaponPool.add(modifier);
     }
 
     private static void addBow(Modifier modifier) {

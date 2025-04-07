@@ -83,18 +83,21 @@ public class Modifier {
         List<MutableComponent> lines = new ObjectArrayList<>();
         int size = modifiers.size();
         if (size < 1) return lines;
-//        I18n.get()
-        if (size == 1) {
-            MutableComponent description = getModifierDescription(modifiers.get(0));
-            if (description == null) return lines;
-            lines.add(getFormattedName().copy().append(": ").setStyle(Style.EMPTY.applyFormat(ChatFormatting.GRAY)).append(description));
+        if (!I18n.get("modifier." + name.getNamespace() + "." + name.getPath() + ".desc").equalsIgnoreCase("modifier." + name.getNamespace() + "." + name.getPath() + ".desc")) {
+            lines.add(getFormattedName().copy().append(": ").setStyle(Style.EMPTY.applyFormat(ChatFormatting.GRAY)).append(Component.translatable("modifier." + name.getNamespace() + "." + name.getPath() + ".desc")));
         } else {
-            lines.add(getFormattedName().copy().append(": ").setStyle(Style.EMPTY.applyFormat(ChatFormatting.GRAY)));
-            for (Pair<Attribute, AttributeModifierSupplier> modifier : modifiers) {
-                MutableComponent modifierDescription = getModifierDescription(modifier);
-                if (modifierDescription != null) lines.add(modifierDescription);
+            if (size == 1) {
+                MutableComponent description = getModifierDescription(modifiers.get(0));
+                if (description == null) return lines;
+                lines.add(getFormattedName().copy().append(": ").setStyle(Style.EMPTY.applyFormat(ChatFormatting.GRAY)).append(description));
+            } else {
+                lines.add(getFormattedName().copy().append(": ").setStyle(Style.EMPTY.applyFormat(ChatFormatting.GRAY)));
+                for (Pair<Attribute, AttributeModifierSupplier> modifier : modifiers) {
+                    MutableComponent modifierDescription = getModifierDescription(modifier);
+                    if (modifierDescription != null) lines.add(modifierDescription);
+                }
+                if (lines.size() == 1) lines.clear();
             }
-            if (lines.size() == 1) lines.clear();
         }
         return lines;
     }

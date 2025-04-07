@@ -291,6 +291,60 @@ public class ModifierHandler {
         return list;
     }
 
+    public static List<String> getWeaponNames() {
+        List<String> list = new ArrayList<>();
+        List<Integer> integers = getTypeModifier("weapon");
+        for (Integer integer : integers) {
+            list.add(JsonConfigInitialier.MODIFIER_NAMES.get(integer));
+        }
+        return list;
+    }
+
+    public static List<String> getWeaponWeights() {
+        List<String> list = new ArrayList<String>();
+        List<Integer> integers = getTypeModifier("weapon");
+        for (Integer integer : integers) {
+            list.add(JsonConfigInitialier.MODIFIER_WEIGHTS.get(integer));
+        }
+        return list;
+    }
+
+    public static List<String> getWeaponRarities() {
+        List<String> list = new ArrayList<String>();
+        List<Integer> integers = getTypeModifier("weapon");
+        for (Integer integer : integers) {
+            list.add(JsonConfigInitialier.MODIFIER_RARITY.get(integer));
+        }
+        return list;
+    }
+
+    public static List<String> getWeaponAttributes() {
+        List<String> list = new ArrayList<String>();
+        List<Integer> integers = getTypeModifier("weapon");
+        for (Integer integer : integers) {
+            list.add(JsonConfigInitialier.MODIFIER_ATTRIBUTES.get(integer));
+        }
+        return list;
+    }
+
+    public static List<String> getWeaponAmounts() {
+        List<String> list = new ArrayList<String>();
+        List<Integer> integers = getTypeModifier("weapon");
+        for (Integer integer : integers) {
+            list.add(JsonConfigInitialier.MODIFIER_AMOUNTS.get(integer));
+        }
+        return list;
+    }
+
+    public static List<String> getWeaponOperationsIDS() {
+        List<String> list = new ArrayList<String>();
+        List<Integer> integers = getTypeModifier("weapon");
+        for (Integer integer : integers) {
+            list.add(JsonConfigInitialier.MODIFIER_OPERATION_ID.get(integer));
+        }
+        return list;
+    }
+
     public static List<String> getArmorsNames() {
         List<String> list = new ArrayList<>();
         List<Integer> integers = getTypeModifier("armor");
