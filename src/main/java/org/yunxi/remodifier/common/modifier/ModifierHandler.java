@@ -25,7 +25,7 @@ public class ModifierHandler {
     public static final String bookTagName = "bookModifier";
 
     public static boolean canHaveModifiers(@NotNull ItemStack stack) {
-        return Modifiers.curioPool.isApplicable.test(stack) || Modifiers.toolPool.isApplicable.test(stack) || Modifiers.bowPool.isApplicable.test(stack) || Modifiers.shieldPool.isApplicable.test(stack) || Modifiers.armorPool.isApplicable.test(stack);
+        return Modifiers.curioPool.isApplicable.test(stack) || Modifiers.toolPool.isApplicable.test(stack) || Modifiers.bowPool.isApplicable.test(stack) || Modifiers.shieldPool.isApplicable.test(stack) || Modifiers.armorPool.isApplicable.test(stack) || Modifiers.weaponPool.isApplicable.test(stack);
     }
 
     @Nullable
@@ -36,6 +36,7 @@ public class ModifierHandler {
         if (Modifiers.bowPool.isApplicable.test(stack)) return Modifiers.bowPool.roll(random);
         if (Modifiers.shieldPool.isApplicable.test(stack)) return Modifiers.shieldPool.roll(random);
         if (Modifiers.armorPool.isApplicable.test(stack)) return Modifiers.armorPool.roll(random);
+        if (Modifiers.weaponPool.isApplicable.test(stack)) return Modifiers.weaponPool.roll(random);
         return null;
     }
 

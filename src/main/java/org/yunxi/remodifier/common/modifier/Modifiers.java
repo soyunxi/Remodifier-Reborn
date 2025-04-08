@@ -197,6 +197,36 @@ public class Modifiers {
         }
     }
 
+    private static void initWeaponModifiers() {
+        List<? extends String> MODIFIERS_NAMES = merge(WeaponModifiersConfig.NAMES.get(), ModifierHandler.getWeaponNames());
+        List<? extends String> MODIFIERS_WEIGHTS = merge(WeaponModifiersConfig.WEIGHTS.get(), ModifierHandler.getWeaponWeights());
+        List<? extends String> MODIFIERS_RARITIES = merge(WeaponModifiersConfig.RARITIES.get(), ModifierHandler.getWeaponRarities());
+        List<? extends String> MODIFIERS_ATTRIBUTES = merge(WeaponModifiersConfig.ATTRIBUTES.get(), ModifierHandler.getWeaponAttributes());
+        List<? extends String> MODIFIERS_AMOUNTS = merge(WeaponModifiersConfig.AMOUNTS.get(), ModifierHandler.getWeaponAmounts());
+        List<? extends String> MODIFIERS_OPERATIONS_IDS = merge(WeaponModifiersConfig.OPERATIONS_IDS.get(), ModifierHandler.getWeaponOperationsIDS());
+        for (int index = 0; index < MODIFIERS_NAMES.size(); index++) {
+            String name = MODIFIERS_NAMES.get(index);
+            String weight = MODIFIERS_WEIGHTS.get(index);
+            String rarity = MODIFIERS_RARITIES.get(index);
+            String attribute = MODIFIERS_ATTRIBUTES.get(index);
+            String amount = MODIFIERS_AMOUNTS.get(index);
+            String operations_id = MODIFIERS_OPERATIONS_IDS.get(index);
+            if (attribute.contains(";")) {
+                String[] attributes = attribute.split(";");
+                String[] amounts = amount.split(";");
+                String[] operations_ids = operations_id.split(";");
+                addWeapon(held(name).addModifiers(attributes, mods(amounts, operations_ids)).setWeight(Integer.parseInt(weight)).build());
+            } else {
+                Attribute entityAttribute = ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(attribute));
+                if (entityAttribute == null) {
+                    Remodifier.LOGGER.error("Invalid value: {}", attribute);
+                    return;
+                }
+                addWeapon(held(name).setWeight(Integer.parseInt(weight)).setRarity(Integer.parseInt(rarity)).addModifier(entityAttribute, mod(Double.parseDouble(amount), AttributeModifier.Operation.fromValue(Integer.parseInt(operations_id)))).build());
+            }
+        }
+    }
+
     private static void initArmorsModifiers() {
         List<? extends String> MODIFIERS_NAMES = merge(ArmorModifiersConfig.NAMES.get(), ModifierHandler.getArmorsNames());
         List<? extends String> MODIFIERS_WEIGHTS = merge(ArmorModifiersConfig.WEIGHTS.get(), ModifierHandler.getArmorsWeights());
@@ -260,6 +290,7 @@ public class Modifiers {
     public static void initialize() {
         try {
             initToolModifiers();
+            if (!WeaponModifiersConfig.WHETHER_OR_NOT_WEAPON_USE_TOOL_MODIFIERS.get()) initWeaponModifiers();
             initArmorsModifiers();
             initBowModifiers();
             initShieldModifiers();
