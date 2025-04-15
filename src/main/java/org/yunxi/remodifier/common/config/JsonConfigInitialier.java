@@ -1,9 +1,6 @@
 package org.yunxi.remodifier.common.config;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.google.gson.*;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraftforge.fml.loading.FMLLoader;
 import org.apache.logging.log4j.LogManager;
@@ -12,10 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import org.yunxi.remodifier.Remodifier;
 import org.yunxi.remodifier.common.config.toml.ReModifierConfig;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -95,6 +89,42 @@ public class JsonConfigInitialier {
     public static final List<String> MODIFIER_ATTRIBUTES = getElements(MODIFIER_JSONS, ATTRIBUTES);
     public static final List<String> MODIFIER_AMOUNTS = getElements(MODIFIER_JSONS, AMOUNTS);
     public static final List<String> MODIFIER_OPERATION_ID = getElements(MODIFIER_JSONS, OPERATION_ID);
+    public static final List<List<String>> MODIFIER_WHITE_LIST = MODIFIER_JSONS.stream().map(file -> {
+        try {
+            FileReader fileReader = new FileReader(file);
+            JsonObject asJsonObject = JsonParser.parseReader(fileReader).getAsJsonObject();
+            if (asJsonObject.has("whitelist")){
+                List<String> list = new ArrayList<>();
+                for (JsonElement whitelist : asJsonObject.getAsJsonArray("whitelist")) {
+                    if (whitelist.isJsonPrimitive()) {
+                        list.add(whitelist.getAsString());
+                    }
+                }
+                return list;
+            }
+        } catch (Throwable throwable) {
+            Remodifier.LOGGER.error("Error occurs during {} reading", file.getName(), throwable);
+        }
+        return null;
+    }).collect(Collectors.toList());
+    public static final List<List<String>> MODIFIER_BLACK_LIST = MODIFIER_JSONS.stream().map(file -> {
+        try {
+            FileReader fileReader = new FileReader(file);
+            JsonObject asJsonObject = JsonParser.parseReader(fileReader).getAsJsonObject();
+            if (asJsonObject.has("blacklist")){
+                List<String> list = new ArrayList<>();
+                for (JsonElement blacklist : asJsonObject.getAsJsonArray("blacklist")) {
+                    if (blacklist.isJsonPrimitive()) {
+                        list.add(blacklist.getAsString());
+                    }
+                }
+                return list;
+            }
+        } catch (Throwable throwable) {
+            Remodifier.LOGGER.error("Error occurs during {} reading", file.getName(), throwable);
+        }
+        return null;
+    }).collect(Collectors.toList());
     public static final List<String> MODIFIER_RARITY = getElements(MODIFIER_JSONS, RARITY);
 
     private static final List<File> QUALITY_JSONS = readFiles(ROOT.resolve("qualities"));

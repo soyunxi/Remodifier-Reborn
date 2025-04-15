@@ -107,6 +107,14 @@ public class Modifiers {
         return list;
     }
 
+    @Contract("_, _ -> new")
+    private static @NotNull List<List<? extends String>> mergeList(@NotNull List<List<? extends String>> iterable1, List<List<? extends String>> iterable2) {
+        ArrayList<List<? extends String>> list = new ArrayList<>(iterable1);
+        list.addAll(iterable2);
+        return list;
+    }
+
+
     private static void initBowModifiers() {
         List<? extends String> MODIFIERS_NAMES = merge(BowModifiersConfig.NAMES.get(), ModifierHandler.getBowNames());
         List<? extends String> MODIFIERS_WEIGHTS = merge(BowModifiersConfig.WEIGHTS.get(), ModifierHandler.getBowWeights());
@@ -114,6 +122,8 @@ public class Modifiers {
         List<? extends String> MODIFIERS_ATTRIBUTES = merge(BowModifiersConfig.ATTRIBUTES.get(), ModifierHandler.getBowAttributes());
         List<? extends String> MODIFIERS_AMOUNTS = merge(BowModifiersConfig.AMOUNTS.get(), ModifierHandler.getBowAmounts());
         List<? extends String> MODIFIERS_OPERATIONS_IDS = merge(BowModifiersConfig.OPERATIONS_IDS.get(), ModifierHandler.getBowOperationsIDS());
+        List<List<String>> MODIFIERS_WHITE_LIST = ModifierHandler.getBowWhitelist();
+        List<List<String>> MODIFIERS_BLACK_LIST = ModifierHandler.getBowBlacklist();
         for (int index = 0; index < MODIFIERS_NAMES.size(); index++) {
             String name = MODIFIERS_NAMES.get(index);
             String weight = MODIFIERS_WEIGHTS.get(index);
@@ -121,18 +131,20 @@ public class Modifiers {
             String attribute = MODIFIERS_ATTRIBUTES.get(index);
             String amount = MODIFIERS_AMOUNTS.get(index);
             String operations_id = MODIFIERS_OPERATIONS_IDS.get(index);
+            List<String> white_list = MODIFIERS_WHITE_LIST.get(index);
+            List<String> black_list = MODIFIERS_BLACK_LIST.get(index);
             if (attribute.contains(";")) {
                 String[] attributes = attribute.split(";");
                 String[] amounts = amount.split(";");
                 String[] operations_ids = operations_id.split(";");
-                addBow(held(name).addModifiers(attributes, mods(amounts, operations_ids)).setWeight(Integer.parseInt(weight)).build());
+                addBow(held(name).addModifiers(attributes, mods(amounts, operations_ids)).setRarity(Integer.parseInt(rarity)).setWeight(Integer.parseInt(weight)).setWhitelist(white_list).setBlacklist(black_list).build());
             } else {
                 Attribute entityAttribute = ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(attribute));
                 if (entityAttribute == null) {
                     Remodifier.LOGGER.error("Invalid value: {}", attribute);
                     return;
                 }
-                addBow(held(name).setWeight(Integer.parseInt(weight)).setRarity(Integer.parseInt(rarity)).addModifier(entityAttribute, mod(Double.parseDouble(amount), AttributeModifier.Operation.fromValue(Integer.parseInt(operations_id)))).build());
+                addBow(held(name).setWeight(Integer.parseInt(weight)).setRarity(Integer.parseInt(rarity)).setWhitelist(white_list).setBlacklist(black_list).addModifier(entityAttribute, mod(Double.parseDouble(amount), AttributeModifier.Operation.fromValue(Integer.parseInt(operations_id)))).build());
             }
         }
     }
@@ -144,6 +156,8 @@ public class Modifiers {
         List<? extends String> MODIFIERS_ATTRIBUTES = merge(ShieldModifiersConfig.ATTRIBUTES.get(), ModifierHandler.getShieldAttributes());
         List<? extends String> MODIFIERS_AMOUNTS = merge(ShieldModifiersConfig.AMOUNTS.get(), ModifierHandler.getShieldAmounts());
         List<? extends String> MODIFIERS_OPERATIONS_IDS = merge(ShieldModifiersConfig.OPERATIONS_IDS.get(), ModifierHandler.getShieldOperationsIDS());
+        List<List<String>> MODIFIERS_WHITE_LIST = ModifierHandler.getShieldWhitelist();
+        List<List<String>> MODIFIERS_BLACK_LIST = ModifierHandler.getShieldBlacklist();
         for (int index = 0; index < MODIFIERS_NAMES.size(); index++) {
             String name = MODIFIERS_NAMES.get(index);
             String weight = MODIFIERS_WEIGHTS.get(index);
@@ -151,18 +165,20 @@ public class Modifiers {
             String attribute = MODIFIERS_ATTRIBUTES.get(index);
             String amount = MODIFIERS_AMOUNTS.get(index);
             String operations_id = MODIFIERS_OPERATIONS_IDS.get(index);
+            List<String> white_list = MODIFIERS_WHITE_LIST.get(index);
+            List<String> black_list = MODIFIERS_BLACK_LIST.get(index);
             if (attribute.contains(";")) {
                 String[] attributes = attribute.split(";");
                 String[] amounts = amount.split(";");
                 String[] operations_ids = operations_id.split(";");
-                addShield(held(name).addModifiers(attributes, mods(amounts, operations_ids)).setWeight(Integer.parseInt(weight)).build());
+                addShield(held(name).addModifiers(attributes, mods(amounts, operations_ids)).setRarity(Integer.parseInt(rarity)).setWeight(Integer.parseInt(weight)).setWhitelist(white_list).setBlacklist(black_list).build());
             } else {
                 Attribute entityAttribute = ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(attribute));
                 if (entityAttribute == null) {
                     Remodifier.LOGGER.error("Invalid value: {}", attribute);
                     return;
                 }
-                addShield(held(name).setWeight(Integer.parseInt(weight)).setRarity(Integer.parseInt(rarity)).addModifier(entityAttribute, mod(Double.parseDouble(amount), AttributeModifier.Operation.fromValue(Integer.parseInt(operations_id)))).build());
+                addShield(held(name).setWeight(Integer.parseInt(weight)).setRarity(Integer.parseInt(rarity)).setWhitelist(white_list).setBlacklist(black_list).addModifier(entityAttribute, mod(Double.parseDouble(amount), AttributeModifier.Operation.fromValue(Integer.parseInt(operations_id)))).build());
             }
         }
     }
@@ -174,6 +190,8 @@ public class Modifiers {
         List<? extends String> MODIFIERS_ATTRIBUTES = merge(ToolModifiersConfig.ATTRIBUTES.get(), ModifierHandler.getToolAttributes());
         List<? extends String> MODIFIERS_AMOUNTS = merge(ToolModifiersConfig.AMOUNTS.get(), ModifierHandler.getToolAmounts());
         List<? extends String> MODIFIERS_OPERATIONS_IDS = merge(ToolModifiersConfig.OPERATIONS_IDS.get(), ModifierHandler.getToolOperationsIDS());
+        List<List<String>> MODIFIERS_WHITE_LIST = ModifierHandler.getToolWhitelist();
+        List<List<String>> MODIFIERS_BLACK_LIST = ModifierHandler.getToolBlacklist();
         for (int index = 0; index < MODIFIERS_NAMES.size(); index++) {
             String name = MODIFIERS_NAMES.get(index);
             String weight = MODIFIERS_WEIGHTS.get(index);
@@ -181,18 +199,20 @@ public class Modifiers {
             String attribute = MODIFIERS_ATTRIBUTES.get(index);
             String amount = MODIFIERS_AMOUNTS.get(index);
             String operations_id = MODIFIERS_OPERATIONS_IDS.get(index);
+            List<String> white_list = MODIFIERS_WHITE_LIST.get(index);
+            List<String> black_list = MODIFIERS_BLACK_LIST.get(index);
             if (attribute.contains(";")) {
                 String[] attributes = attribute.split(";");
                 String[] amounts = amount.split(";");
                 String[] operations_ids = operations_id.split(";");
-                addTool(held(name).addModifiers(attributes, mods(amounts, operations_ids)).setWeight(Integer.parseInt(weight)).build());
+                addTool(held(name).addModifiers(attributes, mods(amounts, operations_ids)).setRarity(Integer.parseInt(rarity)).setWeight(Integer.parseInt(weight)).setWhitelist(white_list).setBlacklist(black_list).build());
             } else {
                 Attribute entityAttribute = ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(attribute));
                 if (entityAttribute == null) {
                     Remodifier.LOGGER.error("Invalid value: {}", attribute);
                     return;
                 }
-                addTool(held(name).setWeight(Integer.parseInt(weight)).setRarity(Integer.parseInt(rarity)).addModifier(entityAttribute, mod(Double.parseDouble(amount), AttributeModifier.Operation.fromValue(Integer.parseInt(operations_id)))).build());
+                addTool(held(name).setWeight(Integer.parseInt(weight)).setRarity(Integer.parseInt(rarity)).setWhitelist(white_list).setBlacklist(black_list).addModifier(entityAttribute, mod(Double.parseDouble(amount), AttributeModifier.Operation.fromValue(Integer.parseInt(operations_id)))).build());
             }
         }
     }
@@ -204,6 +224,8 @@ public class Modifiers {
         List<? extends String> MODIFIERS_ATTRIBUTES = merge(WeaponModifiersConfig.ATTRIBUTES.get(), ModifierHandler.getWeaponAttributes());
         List<? extends String> MODIFIERS_AMOUNTS = merge(WeaponModifiersConfig.AMOUNTS.get(), ModifierHandler.getWeaponAmounts());
         List<? extends String> MODIFIERS_OPERATIONS_IDS = merge(WeaponModifiersConfig.OPERATIONS_IDS.get(), ModifierHandler.getWeaponOperationsIDS());
+        List<List<String>> MODIFIERS_WHITE_LIST = ModifierHandler.getWeaponWhitelist();
+        List<List<String>> MODIFIERS_BLACK_LIST = ModifierHandler.getWeaponBlacklist();
         for (int index = 0; index < MODIFIERS_NAMES.size(); index++) {
             String name = MODIFIERS_NAMES.get(index);
             String weight = MODIFIERS_WEIGHTS.get(index);
@@ -211,18 +233,20 @@ public class Modifiers {
             String attribute = MODIFIERS_ATTRIBUTES.get(index);
             String amount = MODIFIERS_AMOUNTS.get(index);
             String operations_id = MODIFIERS_OPERATIONS_IDS.get(index);
+            List<String> white_list = MODIFIERS_WHITE_LIST.get(index);
+            List<String> black_list = MODIFIERS_BLACK_LIST.get(index);
             if (attribute.contains(";")) {
                 String[] attributes = attribute.split(";");
                 String[] amounts = amount.split(";");
                 String[] operations_ids = operations_id.split(";");
-                addWeapon(held(name).addModifiers(attributes, mods(amounts, operations_ids)).setWeight(Integer.parseInt(weight)).build());
+                addWeapon(held(name).addModifiers(attributes, mods(amounts, operations_ids)).setRarity(Integer.parseInt(rarity)).setWeight(Integer.parseInt(weight)).setWhitelist(white_list).setBlacklist(black_list).build());
             } else {
                 Attribute entityAttribute = ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(attribute));
                 if (entityAttribute == null) {
                     Remodifier.LOGGER.error("Invalid value: {}", attribute);
                     return;
                 }
-                addWeapon(held(name).setWeight(Integer.parseInt(weight)).setRarity(Integer.parseInt(rarity)).addModifier(entityAttribute, mod(Double.parseDouble(amount), AttributeModifier.Operation.fromValue(Integer.parseInt(operations_id)))).build());
+                addWeapon(held(name).setWeight(Integer.parseInt(weight)).setRarity(Integer.parseInt(rarity)).setWhitelist(white_list).setBlacklist(black_list).addModifier(entityAttribute, mod(Double.parseDouble(amount), AttributeModifier.Operation.fromValue(Integer.parseInt(operations_id)))).build());
             }
         }
     }
@@ -234,6 +258,8 @@ public class Modifiers {
         List<? extends String> MODIFIERS_ATTRIBUTES = merge(ArmorModifiersConfig.ATTRIBUTES.get(), ModifierHandler.getArmorsAttributes());
         List<? extends String> MODIFIERS_AMOUNTS = merge(ArmorModifiersConfig.AMOUNTS.get(), ModifierHandler.getArmorsAmounts());
         List<? extends String> MODIFIERS_OPERATIONS_IDS = merge(ArmorModifiersConfig.OPERATIONS_IDS.get(), ModifierHandler.getArmorsOperationsIDS());
+        List<List<String>> MODIFIERS_WHITE_LIST = ModifierHandler.getArmorsWhitelist();
+        List<List<String>> MODIFIERS_BLACK_LIST = ModifierHandler.getArmorsBlacklist();
         for (int index = 0; index < MODIFIERS_NAMES.size(); index++) {
             String name = MODIFIERS_NAMES.get(index);
             String weight = MODIFIERS_WEIGHTS.get(index);
@@ -241,11 +267,13 @@ public class Modifiers {
             String attribute = MODIFIERS_ATTRIBUTES.get(index);
             String amount = MODIFIERS_AMOUNTS.get(index);
             String operations_id = MODIFIERS_OPERATIONS_IDS.get(index);
+            List<String> white_list = MODIFIERS_WHITE_LIST.get(index);
+            List<String> black_list = MODIFIERS_BLACK_LIST.get(index);
             if (attribute.contains(";")) {
                 String[] attributes = attribute.split(";");
                 String[] amounts = amount.split(";");
                 String[] operations_ids = operations_id.split(";");
-                addArmor(equipped(name).addModifiers(attributes, mods(amounts, operations_ids)).setWeight(Integer.parseInt(weight)).build());
+                addArmor(equipped(name).addModifiers(attributes, mods(amounts, operations_ids)).setRarity(Integer.parseInt(rarity)).setWeight(Integer.parseInt(weight)).setWhitelist(white_list).setBlacklist(black_list).build());
             } else {
                 Attribute entityAttribute = ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(attribute));
                 if (entityAttribute == null) {
@@ -264,6 +292,8 @@ public class Modifiers {
         List<? extends String> MODIFIERS_ATTRIBUTES = merge(CuriosModifiersConfig.ATTRIBUTES.get(), ModifierHandler.getCuriosAttributes());
         List<? extends String> MODIFIERS_AMOUNTS = merge(CuriosModifiersConfig.AMOUNTS.get(), ModifierHandler.getCuriosAmounts());
         List<? extends String> MODIFIERS_OPERATIONS_IDS = merge(CuriosModifiersConfig.OPERATIONS_IDS.get(), ModifierHandler.getCuriosOperationsIDS());
+        List<List<String>> MODIFIERS_WHITE_LIST = ModifierHandler.getCuriosWhitelist();
+        List<List<String>> MODIFIERS_BLACK_LIST = ModifierHandler.getCuriosBlacklist();
         for (int index = 0; index < MODIFIERS_NAMES.size(); index++) {
             String name = MODIFIERS_NAMES.get(index);
             String weight = MODIFIERS_WEIGHTS.get(index);
@@ -271,11 +301,13 @@ public class Modifiers {
             String attribute = MODIFIERS_ATTRIBUTES.get(index);
             String amount = MODIFIERS_AMOUNTS.get(index);
             String operations_id = MODIFIERS_OPERATIONS_IDS.get(index);
+            List<String> white_list = MODIFIERS_WHITE_LIST.get(index);
+            List<String> black_list = MODIFIERS_BLACK_LIST.get(index);
             if (attribute.contains(";")) {
                 String[] attributes = attribute.split(";");
                 String[] amounts = amount.split(";");
                 String[] operations_ids = operations_id.split(";");
-                addCurio(equipped(name).addModifiers(attributes, mods(amounts, operations_ids)).setWeight(Integer.parseInt(weight)).build());
+                addCurio(equipped(name).addModifiers(attributes, mods(amounts, operations_ids)).setRarity(Integer.parseInt(rarity)).setWeight(Integer.parseInt(weight)).setWhitelist(white_list).setBlacklist(black_list).build());
             } else {
                 Attribute entityAttribute = ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(attribute));
                 if (entityAttribute == null) {

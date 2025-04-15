@@ -11,6 +11,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.yunxi.remodifier.common.config.JsonConfigInitialier;
+import org.yunxi.remodifier.common.config.toml.modifiers.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,12 +32,12 @@ public class ModifierHandler {
     @Nullable
     public static Modifier rollModifier(ItemStack stack, Random random) {
         if (!canHaveModifiers(stack)) return null;
-        if (Modifiers.curioPool.isApplicable.test(stack)) return Modifiers.curioPool.roll(random);
-        if (Modifiers.toolPool.isApplicable.test(stack)) return Modifiers.toolPool.roll(random);
-        if (Modifiers.bowPool.isApplicable.test(stack)) return Modifiers.bowPool.roll(random);
-        if (Modifiers.shieldPool.isApplicable.test(stack)) return Modifiers.shieldPool.roll(random);
-        if (Modifiers.armorPool.isApplicable.test(stack)) return Modifiers.armorPool.roll(random);
-        if (Modifiers.weaponPool.isApplicable.test(stack)) return Modifiers.weaponPool.roll(random);
+        if (Modifiers.curioPool.isApplicable.test(stack)) return Modifiers.curioPool.roll(stack, random);
+        if (Modifiers.toolPool.isApplicable.test(stack)) return Modifiers.toolPool.roll(stack, random);
+        if (Modifiers.bowPool.isApplicable.test(stack)) return Modifiers.bowPool.roll(stack, random);
+        if (Modifiers.shieldPool.isApplicable.test(stack)) return Modifiers.shieldPool.roll(stack, random);
+        if (Modifiers.armorPool.isApplicable.test(stack)) return Modifiers.armorPool.roll(stack, random);
+        if (Modifiers.weaponPool.isApplicable.test(stack)) return Modifiers.weaponPool.roll(stack, random);
         return null;
     }
 
@@ -184,6 +185,30 @@ public class ModifierHandler {
         return list;
     }
 
+    public static List<List<String>> getBowWhitelist() {
+        List<List<String>> list = new ArrayList<>();
+        List<Integer> integers = getTypeModifier("bow");
+        for (String s : BowModifiersConfig.NAMES.get()) {
+            list.add(null);
+        }
+        for (Integer integer : integers) {
+            list.add(JsonConfigInitialier.MODIFIER_WHITE_LIST.get(integer));
+        }
+        return list;
+    }
+
+    public static List<List<String>> getBowBlacklist() {
+        List<List<String>> list = new ArrayList<>();
+        List<Integer> integers = getTypeModifier("bow");
+        for (String s : BowModifiersConfig.NAMES.get()) {
+            list.add(null);
+        }
+        for (Integer integer : integers) {
+            list.add(JsonConfigInitialier.MODIFIER_WHITE_LIST.get(integer));
+        }
+        return list;
+    }
+
     public static List<String> getShieldNames() {
         List<String> list = new ArrayList<>();
         List<Integer> integers = getTypeModifier("shield");
@@ -234,6 +259,30 @@ public class ModifierHandler {
         List<Integer> integers = getTypeModifier("shield");
         for (Integer integer : integers) {
             list.add(JsonConfigInitialier.MODIFIER_OPERATION_ID.get(integer));
+        }
+        return list;
+    }
+
+    public static List<List<String>> getShieldWhitelist() {
+        List<List<String>> list = new ArrayList<>();
+        List<Integer> integers = getTypeModifier("shield");
+        for (String s : ShieldModifiersConfig.NAMES.get()) {
+            list.add(null);
+        }
+        for (Integer integer : integers) {
+            list.add(JsonConfigInitialier.MODIFIER_WHITE_LIST.get(integer));
+        }
+        return list;
+    }
+
+    public static List<List<String>> getShieldBlacklist() {
+        List<List<String>> list = new ArrayList<>();
+        List<Integer> integers = getTypeModifier("shield");
+        for (String s : ShieldModifiersConfig.NAMES.get()) {
+            list.add(null);
+        }
+        for (Integer integer : integers) {
+            list.add(JsonConfigInitialier.MODIFIER_WHITE_LIST.get(integer));
         }
         return list;
     }
@@ -292,6 +341,30 @@ public class ModifierHandler {
         return list;
     }
 
+    public static List<List<String>> getToolWhitelist() {
+        List<List<String>> list = new ArrayList<>();
+        List<Integer> integers = getTypeModifier("tool");
+        for (String s : ToolModifiersConfig.NAMES.get()) {
+            list.add(null);
+        }
+        for (Integer integer : integers) {
+            list.add(JsonConfigInitialier.MODIFIER_WHITE_LIST.get(integer));
+        }
+        return list;
+    }
+
+    public static List<List<String>> getToolBlacklist() {
+        List<List<String>> list = new ArrayList<>();
+        List<Integer> integers = getTypeModifier("tool");
+        for (String s : ToolModifiersConfig.NAMES.get()) {
+            list.add(null);
+        }
+        for (Integer integer : integers) {
+            list.add(JsonConfigInitialier.MODIFIER_WHITE_LIST.get(integer));
+        }
+        return list;
+    }
+
     public static List<String> getWeaponNames() {
         List<String> list = new ArrayList<>();
         List<Integer> integers = getTypeModifier("weapon");
@@ -342,6 +415,30 @@ public class ModifierHandler {
         List<Integer> integers = getTypeModifier("weapon");
         for (Integer integer : integers) {
             list.add(JsonConfigInitialier.MODIFIER_OPERATION_ID.get(integer));
+        }
+        return list;
+    }
+
+    public static List<List<String>> getWeaponWhitelist() {
+        List<List<String>> list = new ArrayList<>();
+        List<Integer> integers = getTypeModifier("weapon");
+        for (String s : WeaponModifiersConfig.NAMES.get()) {
+            list.add(null);
+        }
+        for (Integer integer : integers) {
+            list.add(JsonConfigInitialier.MODIFIER_WHITE_LIST.get(integer));
+        }
+        return list;
+    }
+
+    public static List<List<String>> getWeaponBlacklist() {
+        List<List<String>> list = new ArrayList<>();
+        List<Integer> integers = getTypeModifier("weapon");
+        for (String s : WeaponModifiersConfig.NAMES.get()) {
+            list.add(null);
+        }
+        for (Integer integer : integers) {
+            list.add(JsonConfigInitialier.MODIFIER_WHITE_LIST.get(integer));
         }
         return list;
     }
@@ -400,6 +497,30 @@ public class ModifierHandler {
         return list;
     }
 
+    public static List<List<String>> getArmorsWhitelist() {
+        List<List<String>> list = new ArrayList<>();
+        List<Integer> integers = getTypeModifier("armor");
+        for (String s : ArmorModifiersConfig.NAMES.get()) {
+            list.add(null);
+        }
+        for (Integer integer : integers) {
+            list.add(JsonConfigInitialier.MODIFIER_WHITE_LIST.get(integer));
+        }
+        return list;
+    }
+
+    public static List<List<String>> getArmorsBlacklist() {
+        List<List<String>> list = new ArrayList<>();
+        List<Integer> integers = getTypeModifier("armor");
+        for (String s : ArmorModifiersConfig.NAMES.get()) {
+            list.add(null);
+        }
+        for (Integer integer : integers) {
+            list.add(JsonConfigInitialier.MODIFIER_WHITE_LIST.get(integer));
+        }
+        return list;
+    }
+
     public static List<String> getCuriosNames() {
         List<String> list = new ArrayList<>();
         List<Integer> integers = getTypeModifier("curios");
@@ -450,6 +571,30 @@ public class ModifierHandler {
         List<Integer> integers = getTypeModifier("curios");
         for (Integer integer : integers) {
             list.add(JsonConfigInitialier.MODIFIER_OPERATION_ID.get(integer));
+        }
+        return list;
+    }
+
+    public static List<List<String>> getCuriosWhitelist() {
+        List<List<String>> list = new ArrayList<>();
+        List<Integer> integers = getTypeModifier("curios");
+        for (String s : CuriosModifiersConfig.NAMES.get()) {
+            list.add(null);
+        }
+        for (Integer integer : integers) {
+            list.add(JsonConfigInitialier.MODIFIER_WHITE_LIST.get(integer));
+        }
+        return list;
+    }
+
+    public static List<List<String>> getCuriosBlacklist() {
+        List<List<String>> list = new ArrayList<>();
+        List<Integer> integers = getTypeModifier("curios");
+        for (String s : CuriosModifiersConfig.NAMES.get()) {
+            list.add(null);
+        }
+        for (Integer integer : integers) {
+            list.add(JsonConfigInitialier.MODIFIER_WHITE_LIST.get(integer));
         }
         return list;
     }

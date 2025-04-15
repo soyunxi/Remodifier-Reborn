@@ -29,15 +29,19 @@ public class Modifier {
     public final int weight;
     public final int rarity;
     public final ModifierType type;
+    public final List<String> whitelist;
+    public final List<String> blacklist;
     public final List<Pair<Attribute, AttributeModifierSupplier>> modifiers;
 
-    public Modifier(ResourceLocation name, String debugName, int weight, int rarity, ModifierType type, List<Pair<Attribute, AttributeModifierSupplier>> modifiers) {
+    public Modifier(ResourceLocation name, String debugName, int weight, int rarity, ModifierType type, List<Pair<Attribute, AttributeModifierSupplier>> modifiers, List<String> whitelist, List<String> blacklist) {
         this.name = name;
         this.debugName = debugName;
         this.weight = weight;
         this.rarity = rarity;
         this.type = type;
         this.modifiers = modifiers;
+        this.whitelist = whitelist;
+        this.blacklist = blacklist;
     }
 
     public Component getFormattedName() {
@@ -110,6 +114,8 @@ public class Modifier {
         final String debugName;
         final ModifierType type;
         List<Pair<Attribute, AttributeModifierSupplier>> modifiers = new ObjectArrayList<>();
+        List<String> whitelist = null;
+        List<String> blacklist = null;
 
         public ModifierBuilder(ResourceLocation name, String debugName, ModifierType type) {
             this.name = name;
@@ -132,6 +138,16 @@ public class Modifier {
             return this;
         }
 
+        public ModifierBuilder setWhitelist(List<String> whitelist) {
+            this.whitelist = whitelist;
+            return this;
+        }
+
+        public ModifierBuilder setBlacklist(List<String> blacklist) {
+            this.blacklist = blacklist;
+            return this;
+        }
+
         public ModifierBuilder addModifiers(String @NotNull [] attribute, AttributeModifierSupplier[] modifier) {
             for (int index = 0; index < attribute.length; index++) {
                 String entityAttribute = attribute[index];
@@ -145,7 +161,7 @@ public class Modifier {
         }
 
         public Modifier build() {
-            return new Modifier(name, debugName, weight,rarity, type, modifiers);
+            return new Modifier(name, debugName, weight,rarity, type, modifiers, whitelist, blacklist);
         }
     }
 

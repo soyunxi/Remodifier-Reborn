@@ -3,6 +3,7 @@ package org.yunxi.remodifier.common.modifier;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.world.item.ItemStack;
 
+import java.util.List;
 import java.util.Random;
 import java.util.Set;
 import java.util.function.Predicate;
@@ -22,7 +23,7 @@ public class ModifierPool {
         totalWeight += mod.weight;
     }
 
-    public Modifier roll(Random random) {
+    public Modifier roll(ItemStack itemStack, Random random) {
         if (totalWeight == 0 || modifiers.isEmpty()) return null;
         int i = random.nextInt(totalWeight);
         int j = 0;
@@ -34,5 +35,20 @@ public class ModifierPool {
         }
         // This shouldn't happen
         return null;
+    }
+
+    private boolean canAdd(ItemStack itemStack, Modifier modifier) {
+        List<String> whitelist = modifier.whitelist;
+        List<String> blacklist = modifier.blacklist;
+        if (whitelist != null && !whitelist.isEmpty()) {
+            for (String white : whitelist) {
+                white.startsWith("#");
+                white.startsWith("@");
+            }
+        } else if (blacklist != null && !blacklist.isEmpty()) {
+
+        } else {
+            return true;
+        }
     }
 }

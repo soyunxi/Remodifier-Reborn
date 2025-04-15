@@ -88,6 +88,7 @@ public class Remodifier {
 
         modLoadingContext.registerConfig(common, ArmorModifiersConfig.CONFIG, "remodifier/modifiers/armor-modifiers.toml");
         modLoadingContext.registerConfig(common, ToolModifiersConfig.CONFIG, "remodifier/modifiers/tool-modifiers.toml");
+        modLoadingContext.registerConfig(common, WeaponModifiersConfig.CONFIG, "remodifier/modifiers/weapon-modifiers.toml");
         modLoadingContext.registerConfig(common, BowModifiersConfig.CONFIG, "remodifier/modifiers/bow-modifiers.toml");
         modLoadingContext.registerConfig(common, ShieldModifiersConfig.CONFIG, "remodifier/modifiers/shield-modifiers.toml");
         modLoadingContext.registerConfig(common, CuriosModifiersConfig.CONFIG, "remodifier/modifiers/curios-modifiers.toml");
