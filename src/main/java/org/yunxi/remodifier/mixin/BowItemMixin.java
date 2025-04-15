@@ -1,30 +1,22 @@
 package org.yunxi.remodifier.mixin;
 
-
-import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ArrowItem;
 import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import org.yunxi.remodifier.common.attribute.Attributes;
-
-import java.util.Random;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 @Mixin(BowItem.class)
 public class BowItemMixin {
-    @Redirect(method = "releaseUsing", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ArrowItem;isInfinite(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/entity/player/Player;)Z"))
-    private boolean noConsumption(ArrowItem instance, ItemStack stack, ItemStack bow, Player player) {
-        Random random = new Random();
-        double v = random.nextDouble(1);
-        AttributeInstance attribute = player.getAttribute(Attributes.NO_CONSUMPTION.get());
-        if (attribute != null && v <= attribute.getValue()) {
-            return true;
-        }
-        return instance.isInfinite(stack, bow, player);
+    @Inject(method = "releaseUsing", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;shrink(I)V",shift = At.Shift.AFTER), locals = LocalCapture.CAPTURE_FAILSOFT)
+    public void releaseUsing(ItemStack pStack, Level pLevel, LivingEntity pEntityLiving, int pTimeLeft, CallbackInfo ci, Player player, boolean flag, ItemStack itemstack, int i, float f, boolean flag1) {
+        itemstack.grow(1);
     }
+
 }
+

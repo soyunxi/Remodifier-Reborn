@@ -185,8 +185,8 @@ dependencies {
     implementation fg.deobf("curse.maven:kiwi-303657:6184688")
     implementation fg.deobf("curse.maven:apothic-attributes-898963:5529789")
     implementation fg.deobf("curse.maven:placebo-283644:6274231")
-    implementation fg.deobf("curse.maven:mmmmmmmmmmmm-225738:6237015")
-    implementation fg.deobf("curse.maven:selene-499980:6323374")
+//    implementation fg.deobf("curse.maven:mmmmmmmmmmmm-225738:6237015")
+//    implementation fg.deobf("curse.maven:selene-499980:6323374")
 
     runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}")
     compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}:api")

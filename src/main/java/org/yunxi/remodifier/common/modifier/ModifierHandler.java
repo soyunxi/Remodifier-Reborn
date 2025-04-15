@@ -204,7 +204,7 @@ public class ModifierHandler {
             list.add(null);
         }
         for (Integer integer : integers) {
-            list.add(JsonConfigInitialier.MODIFIER_WHITE_LIST.get(integer));
+            list.add(JsonConfigInitialier.MODIFIER_BLACK_LIST.get(integer));
         }
         return list;
     }
@@ -282,7 +282,7 @@ public class ModifierHandler {
             list.add(null);
         }
         for (Integer integer : integers) {
-            list.add(JsonConfigInitialier.MODIFIER_WHITE_LIST.get(integer));
+            list.add(JsonConfigInitialier.MODIFIER_BLACK_LIST.get(integer));
         }
         return list;
     }
@@ -360,7 +360,7 @@ public class ModifierHandler {
             list.add(null);
         }
         for (Integer integer : integers) {
-            list.add(JsonConfigInitialier.MODIFIER_WHITE_LIST.get(integer));
+            list.add(JsonConfigInitialier.MODIFIER_BLACK_LIST.get(integer));
         }
         return list;
     }
@@ -438,7 +438,7 @@ public class ModifierHandler {
             list.add(null);
         }
         for (Integer integer : integers) {
-            list.add(JsonConfigInitialier.MODIFIER_WHITE_LIST.get(integer));
+            list.add(JsonConfigInitialier.MODIFIER_BLACK_LIST.get(integer));
         }
         return list;
     }
@@ -516,7 +516,7 @@ public class ModifierHandler {
             list.add(null);
         }
         for (Integer integer : integers) {
-            list.add(JsonConfigInitialier.MODIFIER_WHITE_LIST.get(integer));
+            list.add(JsonConfigInitialier.MODIFIER_BLACK_LIST.get(integer));
         }
         return list;
     }
@@ -594,7 +594,7 @@ public class ModifierHandler {
             list.add(null);
         }
         for (Integer integer : integers) {
-            list.add(JsonConfigInitialier.MODIFIER_WHITE_LIST.get(integer));
+            list.add(JsonConfigInitialier.MODIFIER_BLACK_LIST.get(integer));
         }
         return list;
     }
