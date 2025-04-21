@@ -25,7 +25,7 @@ public class CuriosModifiersConfig {
         ATTRIBUTES = BUILDER.comment("The attribute of the modifier has. One modifier can have multiple attributes. Use ';' to split different attributes").defineList("ATTRIBUTES", Lists.newArrayList(), o -> true);
         AMOUNTS = BUILDER.comment("The amount used to calculate the attribute effect. Also can be multiple. Use ';' to split").defineList("AMOUNTS", Lists.newArrayList(), o -> true);
         OPERATIONS_IDS = BUILDER.comment("The operation ID of the attribute calculation. Can be three values: 0,1,2. 0 is ADDITION. 1 is MULTIPLY_BASE. 2 is MULTIPLY_TOTAL. you can refer to the calculation of the attributes already in the game").defineList("OPERATIONS_IDS", Lists.newArrayList(), o -> true);
-        WHETHER_OR_NOT_CURIOS_USE_ARMOR_MODIFIERS = BUILDER.comment("When enabled, the registries of curios modifiers will be ignored and your curio items will use armor modifiers.").define("WhetherOrNotCuriosUseArmorModifiers", false);
+        WHETHER_OR_NOT_CURIOS_USE_ARMOR_MODIFIERS = BUILDER.comment("When enabled, the registries of curios modifiers will be ignored and your curio items will use armor modifiers.").define("WhetherOrNotCuriosUseArmorModifiers", true);
         BUILDER.pop();
         CONFIG = BUILDER.build();
     }

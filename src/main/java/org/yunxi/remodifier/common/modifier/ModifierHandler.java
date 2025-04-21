@@ -32,7 +32,7 @@ public class ModifierHandler {
     @Nullable
     public static Modifier rollModifier(ItemStack stack, Random random) {
         if (!canHaveModifiers(stack)) return null;
-        if (Modifiers.curioPool.isApplicable.test(stack)) return Modifiers.curioPool.roll(stack, random);
+        if (!CuriosModifiersConfig.WHETHER_OR_NOT_CURIOS_USE_ARMOR_MODIFIERS.get() && Modifiers.curioPool.isApplicable.test(stack)) return Modifiers.curioPool.roll(stack, random);
         if (Modifiers.toolPool.isApplicable.test(stack)) return Modifiers.toolPool.roll(stack, random);
         if (Modifiers.bowPool.isApplicable.test(stack)) return Modifiers.bowPool.roll(stack, random);
         if (Modifiers.shieldPool.isApplicable.test(stack)) return Modifiers.shieldPool.roll(stack, random);

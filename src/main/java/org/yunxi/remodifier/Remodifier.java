@@ -24,7 +24,6 @@ import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -97,6 +96,13 @@ public class Remodifier {
         modLoadingContext.registerConfig(common, ReModifierConfig.CONFIG, "remodifier/config.toml");
     }
 
+    private static Boolean isCuriosLoaded = null;
+
+    public static boolean isCuriosLoaded() {
+        if (isCuriosLoaded == null) isCuriosLoaded = ModList.get().isLoaded("curios");
+        return isCuriosLoaded;
+    }
+
     private void commonSetup(final FMLCommonSetupEvent event) {
         new JsonConfigInitialier().init();
         Modifiers.initialize();
@@ -159,13 +165,6 @@ public class Remodifier {
                 );
             });
         }
-    }
-
-    private static Boolean isCuriosLoaded = null;
-
-    public static boolean isCuriosLoaded() {
-        if (isCuriosLoaded == null) isCuriosLoaded = ModList.get().isLoaded("curios");
-        return isCuriosLoaded;
     }
 
     static {

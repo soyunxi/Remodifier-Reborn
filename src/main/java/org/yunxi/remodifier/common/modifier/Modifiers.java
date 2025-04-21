@@ -28,7 +28,7 @@ public class Modifiers {
 
     public static final ModifierPool curioPool = new ModifierPool(stack -> Remodifier.CURIO_PROXY.isModifiableCurio(stack));
 
-    public static final ModifierPool armorPool = new ModifierPool(stack -> stack.getItem() instanceof ArmorItem || (CuriosModifiersConfig.WHETHER_OR_NOT_CURIOS_USE_ARMOR_MODIFIERS.get() && Remodifier.CURIO_PROXY.isModifiableCurio(stack)));
+    public static final ModifierPool armorPool = new ModifierPool(stack -> stack.getItem() instanceof ArmorItem || CuriosModifiersConfig.WHETHER_OR_NOT_CURIOS_USE_ARMOR_MODIFIERS.get() && Remodifier.CURIO_PROXY.isModifiableCurio(stack));
 
     public static final ModifierPool toolPool = new ModifierPool(stack -> {
         Item item = stack.getItem();

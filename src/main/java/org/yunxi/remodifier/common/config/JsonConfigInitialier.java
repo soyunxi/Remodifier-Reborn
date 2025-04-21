@@ -9,7 +9,10 @@ import org.jetbrains.annotations.NotNull;
 import org.yunxi.remodifier.Remodifier;
 import org.yunxi.remodifier.common.config.toml.ReModifierConfig;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;

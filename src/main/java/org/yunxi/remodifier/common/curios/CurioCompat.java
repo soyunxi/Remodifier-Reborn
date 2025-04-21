@@ -1,6 +1,7 @@
 package org.yunxi.remodifier.common.curios;
 
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import org.yunxi.remodifier.common.modifier.Modifier;
@@ -18,15 +19,17 @@ public class CurioCompat implements ICurioProxy {
         String identifier = event.getIdentifier();
         int slot = event.getSlotIndex();
 
-        Modifier modFrom = ModifierHandler.getModifier(event.getFrom());
-        if (modFrom != null) ModifierHandler.removeCurioModifier(entity, modFrom, identifier, slot);
-        Modifier modifier = ModifierHandler.getModifier(to);
-        if (modifier == null) {
-            modifier = ModifierHandler.rollModifier(to, ThreadLocalRandom.current());
-            if (modifier == null) return;
-            ModifierHandler.setModifier(to, modifier);
+        if (entity instanceof Player player) {
+            Modifier modFrom = ModifierHandler.getModifier(event.getFrom());
+            if (modFrom != null) ModifierHandler.removeCurioModifier(entity, modFrom, identifier, slot);
+            Modifier modifier = ModifierHandler.getModifier(to);
+            if (modifier == null) {
+                modifier = ModifierHandler.rollModifier(to, ThreadLocalRandom.current());
+                if (modifier == null) return;
+                ModifierHandler.setModifier(to, modifier);
+            }
+            ModifierHandler.applyCurioModifier(entity, modifier, identifier, slot);
         }
-        ModifierHandler.applyCurioModifier(entity, modifier, identifier, slot);
     }
 
     @Override

@@ -5,8 +5,6 @@ import net.minecraft.world.entity.ai.attributes.RangedAttribute;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
-import org.checkerframework.checker.units.qual.A;
-import org.spongepowered.asm.mixin.injection.At;
 import org.yunxi.remodifier.Remodifier;
 
 public class Attributes {

@@ -185,6 +185,9 @@ dependencies {
     implementation fg.deobf("curse.maven:kiwi-303657:6184688")
     implementation fg.deobf("curse.maven:apothic-attributes-898963:5529789")
     implementation fg.deobf("curse.maven:placebo-283644:6274231")
+    implementation fg.deobf("curse.maven:enigmatic-legacy-336184:5600004")
+    implementation fg.deobf("curse.maven:caelus-308989:5281700")
+    implementation fg.deobf("curse.maven:patchouli-306770:6164575")
 //    implementation fg.deobf("curse.maven:mmmmmmmmmmmm-225738:6237015")
 //    implementation fg.deobf("curse.maven:selene-499980:6323374")
 
