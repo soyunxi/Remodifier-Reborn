@@ -14,19 +14,6 @@ import java.util.Random;
 
 @Mixin(BowItem.class)
 public class BowItemMixin {
-    /*@Inject(method = "releaseUsing", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;shrink(I)V",shift = At.Shift.AFTER), locals = LocalCapture.CAPTURE_FAILSOFT)
-    public void releaseUsing(ItemStack pStack, Level pLevel, LivingEntity pEntityLiving, int pTimeLeft, CallbackInfo ci, Player player, boolean flag, ItemStack itemstack, int i, float f, boolean flag1) {
-        AttributeInstance attribute = player.getAttribute(Attributes.NO_CONSUMPTION.get());
-        if (attribute != null) {
-            double remodifier_reborn$d = new Random().nextDouble(1);
-            if (attribute.getValue() >= remodifier_reborn$d) {
-                itemstack.grow(1);
-                CompoundTag orCreateTag = pStack.getOrCreateTag();
-                orCreateTag.putDouble("random", remodifier_reborn$d);
-            }
-        }
-    }*/
-
     @Redirect(method = "releaseUsing", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ArrowItem;isInfinite(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/entity/player/Player;)Z"))
     public boolean releaseUsing(ArrowItem instance, ItemStack stack, ItemStack bow, Player player) {
         AttributeInstance attribute = player.getAttribute(Attributes.NO_CONSUMPTION.get());
