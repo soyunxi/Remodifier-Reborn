@@ -28,25 +28,26 @@ public class Modifiers {
 
     public static final ModifierPool curioPool = new ModifierPool(stack -> Remodifier.CURIO_PROXY.isModifiableCurio(stack));
 
-    public static final ModifierPool armorPool = new ModifierPool(stack -> stack.getItem() instanceof ArmorItem || CuriosModifiersConfig.WHETHER_OR_NOT_CURIOS_USE_ARMOR_MODIFIERS.get() && Remodifier.CURIO_PROXY.isModifiableCurio(stack));
+    public static final ModifierPool armorPool = new ModifierPool(stack -> stack.getItem() instanceof ArmorItem || stack.is(ModTags.Items.ARMOR_ITEMS) || (CuriosModifiersConfig.WHETHER_OR_NOT_CURIOS_USE_ARMOR_MODIFIERS.get() && Remodifier.CURIO_PROXY.isModifiableCurio(stack)));
 
     public static final ModifierPool toolPool = new ModifierPool(stack -> {
         Item item = stack.getItem();
         if (WeaponModifiersConfig.WHETHER_OR_NOT_WEAPON_USE_TOOL_MODIFIERS.get() && item instanceof SwordItem) return true;
+        if (stack.is(ModTags.Items.TOOL_ITEMS)) return true;
         return item instanceof DiggerItem;
     });
 
     public static final ModifierPool weaponPool = new ModifierPool(stack -> {
         Item item = stack.getItem();
         if (!WeaponModifiersConfig.WHETHER_OR_NOT_WEAPON_USE_TOOL_MODIFIERS.get()) {
-            return item instanceof SwordItem;
+            return item instanceof SwordItem || stack.is(ModTags.Items.WEAPON_ITEMS);
         }
         return false;
     });
 
-    public static final ModifierPool bowPool = new ModifierPool(stack -> stack.getItem() instanceof ProjectileWeaponItem);
+    public static final ModifierPool bowPool = new ModifierPool(stack -> stack.getItem() instanceof ProjectileWeaponItem || stack.is(ModTags.Items.BOW_ITEMS));
 
-    public static final ModifierPool shieldPool = new ModifierPool(stack -> stack.getItem() instanceof ShieldItem);
+    public static final ModifierPool shieldPool = new ModifierPool(stack -> stack.getItem() instanceof ShieldItem || stack.is(ModTags.Items.SHIELD_ITEMS));
 
     @Contract("_ -> new")
     private static Modifier.@NotNull ModifierBuilder equipped(String name) {
